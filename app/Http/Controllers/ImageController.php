@@ -10,8 +10,8 @@ class ImageController extends Controller
 {
     use Image;
 
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         $file = $request->file('file');
 
         $path = $request->input('path');
@@ -22,11 +22,10 @@ class ImageController extends Controller
         return response()->json(['path' => $filePath], Response::HTTP_OK);
     }
 
-    public function destroy(Request $request){
+    public function destroy(Request $request)
+    {
+        $filePath = 'storage/' . $request->file_path;
 
-        $filePath = $request->input('file_path');
-
-        $this->destroyImage($filePath);
-
+        return $this->destroyImage($filePath);
     }
 }

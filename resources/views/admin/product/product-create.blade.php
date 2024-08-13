@@ -4,10 +4,19 @@
 @endsection
 @section('css')
     <!-- extra css -->
+    <link rel="stylesheet" href="{{ URL::asset('build/libs/@simonwep/classic.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('backend/build/libs/dropzone/dropzone.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 @endsection
 @section('content')
     <x-breadcrumb title="Create product" pagetitle="Product" />
-    <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate>
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <p class="text-danger fs-5">{{ $error }}</p>
+        @endforeach
+    @endif
+    <form id="createproduct-form" action="{{ route('admin.product.store') }}" class="needs-validation" method="POST">
+        @csrf
         <div class="row">
             <div class="col-xl-9 col-lg-8">
                 <div class="card">
@@ -28,34 +37,112 @@
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="form-label" for="product-title-input">Product title</label>
-                            <input type="text" class="form-control" id="product-title-input" value=""
-                                placeholder="Enter product title" name="title" value="{{ old('title') }}" required>
-                            <div class="invalid-feedback">Please enter a product title.</div>
+                            <label class="form-label" for="product-title-input">Product Title</label>
+                            <input type="text"
+                                class="form-control @error('name')
+                            is-invalid
+                            @enderror"
+                                id="product-title-input" placeholder="Enter product title" name="name"
+                                value="{{ old('name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Product description</label>
-                            <textarea id="ckeditor-classic" name="description" value="{{ old('description') }}"></textarea>
+                            <label class="form-label">Product Description</label>
+                            <textarea id="ckeditor-classic" name="long_description" class="@error('long_description') is-invalid @enderror">{{ old('long_description') }}</textarea>
+                            @error('long_description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <div>
-                            <div class="d-flex align-items-start">
-                                <div class="flex-grow-1">
-                                    <label class="form-label">Product category</label>
+                        <div class="row">
+                            <div class="col-xxl-6 col-sm-12 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label">Store</label>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <a href="{{ route('admin.store.index') }}"
+                                            class="float-end text-decoration-underline">Add New</a>
+                                    </div>
                                 </div>
-                                <div class="flex-shrink-0">
-                                    <a href="#" class="float-end text-decoration-underline">Add New</a>
+                                <div>
+                                    <select class="form-select store @error('store') is-invalid @enderror" id="store"
+                                        name="store">
+                                        <option value="">Select store</option>
+                                        @foreach ($stores as $store)
+                                            <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
+                                @error('store')
+                                    <div class="error-msg mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div>
-                                <select class="form-select" id="choices-category-input" name="choices-category-input">
-                                    <option value="">Select product category</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-xxl-6 col-sm-12 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label">Category</label>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <a href="{{ route('admin.category.index') }}"
+                                            class="float-end text-decoration-underline">Add New</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <select class="form-select category @error('category') is-invalid @enderror"
+                                        id="category" name="category">
+                                        <option value="">Select category</option>
+                                    </select>
+                                </div>
+                                @error('category')
+                                    <div class="error-msg mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="error-msg mt-1">Please select a product category.</div>
+                            <div class="col-xxl-6 col-sm-12 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label">SubCategory</label>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <a href="{{ route('admin.sub-category.index') }}"
+                                            class="float-end text-decoration-underline">Add New</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <select class="form-select sub_category @error('sub_category') is-invalid @enderror"
+                                        id="sub_category" name="sub_category">
+                                        <option value="">Select SubCategory</option>
+                                    </select>
+                                </div>
+                                @error('sub_category')
+                                    <div class="error-msg mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-xxl-6 col-sm-12 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label">Brand</label>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <a href="{{ route('admin.brand.create') }}"
+                                            class="float-end text-decoration-underline">Add New</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <select class="form-select brand @error('brand') is-invalid @enderror" id="brand"
+                                        name="brand">
+                                        <option value="">Select Brand</option>
+                                        @foreach ($brands as $brand)
+                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('brand')
+                                    <div class="error-msg mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +165,15 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="dropzone my-dropzone">
+                        <input type="hidden" name="images" id="images" value="{{ old('images') }}">
+
+                            @foreach (explode(',', old('images')) as $image)
+                                <img src="{{ asset('storage/' . $image) }}" alt="" height="200"
+                                    class="card-img-top img-fluid" id="image-thumbnail"
+                                    data-base-url="{{ asset('storage/' . $image) }}">
+                            @endforeach
+
+                        <div class="dropzone my-dropzone text-center">
                             <div class="dz-message">
                                 <div class="mb-3">
                                     <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
@@ -112,200 +207,212 @@
                         <div class="row ">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label" for="manufacturer-name-input">Manufacturer Name</label>
-                                    <input type="text" class="form-control" id="manufacturer-name-input"
-                                        placeholder="Enter manufacturer name">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="manufacturer-brand-input">Manufacturer Brand</label>
-                                    <input type="text" class="form-control" id="manufacturer-brand-input"
-                                        placeholder="Enter manufacturer brand">
+                                    <label class="form-label" for="manufacturer">Manufacturer</label>
+                                    <input type="text" class="form-control @error('manufacturer') is-invalid @enderror"
+                                        id="manufacturer" name="manufacturer" placeholder="Enter manufacturer name"
+                                        value="{{ old('manufacturer') }}">
+                                    @error('manufacturer')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                         <!-- end row -->
 
                         <div class="row">
-                            <div class="col-lg-3 col-sm-6">
+                            <div class="col-lg-4 col-sm-6">
                                 <div class="mb-3">
-                                    <label class="form-label" for="stocks-input">Stocks</label>
-                                    <input type="text" class="form-control" id="stocks-input" placeholder="Stocks"
-                                        required>
-                                    <div class="invalid-feedback">Please enter a product stocks.</div>
+                                    <label class="form-label" for="stocks">Stocks</label>
+                                    <input type="number" class="form-control @error('stock_qty') is-invalid @enderror"
+                                        id="stocks" placeholder="Stocks" name="stock_qty"
+                                        value="{{ old('stock_qty') }}">
+                                    @error('stock_qty')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6">
+                            <div class="col-lg-4 col-sm-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="product-price-input">Price</label>
                                     <div class="input-group has-validation mb-3">
                                         <span class="input-group-text" id="product-price-addon">$</span>
-                                        <input type="text" class="form-control" id="product-price-input"
-                                            placeholder="Enter price" aria-label="Price"
-                                            aria-describedby="product-price-addon" required>
-                                        <div class="invalid-feedback">Please enter a product price.</div>
+                                        <input type="text" class="form-control @error('price') is-invalid @enderror"
+                                            id="product-price-input" name="price" placeholder="Enter price"
+                                            value="{{ old('price') }}" aria-label="Price"
+                                            aria-describedby="product-price-addon">
+                                        @error('price')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="product-discount-input">Discount</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-discount-addon">%</span>
-                                        <input type="text" class="form-control" id="product-discount-input"
-                                            placeholder="Enter discount" aria-label="discount"
-                                            aria-describedby="product-discount-addon" required>
-                                        <div class="invalid-feedback">Please enter a product discount.</div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="orders-input">Orders</label>
-                                    <input type="text" class="form-control" id="orders-input" placeholder="Orders"
-                                        required>
-                                    <div class="invalid-feedback">Please enter a product orders.</div>
                                 </div>
                             </div>
                             <!-- end col -->
                         </div>
                         <!-- end row -->
-
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div>
-                                    <label class="form-label">Colors</label>
-                                    <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
-                                        <li>
-                                            <input type="checkbox" value="success" id="color-1">
-                                            <label
-                                                class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-1"></label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="info" id="color-2">
-                                            <label
-                                                class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-2"></label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="warning" id="color-3">
-                                            <label
-                                                class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-3"></label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="danger" id="color-4">
-                                            <label
-                                                class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-4"></label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="primary" id="color-5">
-                                            <label
-                                                class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-5"></label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="secondary" id="color-6">
-                                            <label
-                                                class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-6"></label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="dark" id="color-7">
-                                            <label
-                                                class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-7"></label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="light" id="color-8">
-                                            <label
-                                                class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="color-8"></label>
-                                        </li>
-                                    </ul>
-                                    <div class="error-msg mt-1">Please select a product colors.</div>
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="product-discount-input">Offer Price</label>
+                                    <div class="input-group has-validation mb-3">
+                                        <span class="input-group-text" id="product-price-addon">$</span>
+                                        <input type="text"
+                                            class="form-control @error('offer_price') is-invalid @enderror"
+                                            id="offer_price" placeholder="Enter offer price"
+                                            value="{{ old('offer_price') }}" aria-label="offer_price"
+                                            aria-describedby="product-discount-addon" name="offer_price">
+                                        @error('offer_price')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="mt-3 mt-lg-0">
-                                    <label class="form-label">Sizes</label>
-                                    <ul class="clothe-size list-unstyled hstack gap-2 mb-0 flex-wrap" id="size-filter">
-                                        <li>
-                                            <input type="checkbox" value="xs" id="sizeXs">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="sizeXs">XS</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="s" id="sizeS">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="sizeS">S</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="m" id="sizeM">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="sizeM">M</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="l" id="sizeL">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="sizeL">L</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="xl" id="sizeXl">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="sizeXl">XL</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="2xl" id="size2xl">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="size2xl">2XL</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="3xl" id="size3xl">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="size3xl">3XL</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="40" id="size40">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="size40">40</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="41" id="size41">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="size41">41</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="42" id="size42">
-                                            <label
-                                                class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                for="size42">42</label>
-                                        </li>
-                                    </ul>
-                                    <div class="error-msg mt-1">Please select a product sizes.</div>
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="offer_start_date">Offer Start Date</label>
+                                    <div class="input-group has-validation mb-3">
+                                        <span class="input-group-text" id="product-price-addon"><i
+                                                class="bi bi-calendar-date"></i></span>
+                                        <input type="date"
+                                            class="form-control @error('offer_start_date') is-invalid @enderror"
+                                            id="offer_start_date" placeholder="Enter offer price"
+                                            aria-label="offer_start_date" aria-describedby="product-discount-addon"
+                                            name="offer_start_date" value="{{ old('offer_start_date') }}">
+                                        @error('offer_start_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="offer_end_date">Offer End Date</label>
+                                    <div class="input-group has-validation mb-3">
+                                        <span class="input-group-text" id="product-price-addon"><i
+                                                class="bi bi-calendar-date"></i></span>
+                                        <input type="date"
+                                            class="form-control @error('offer_end_date') is-invalid @enderror"
+                                            id="offer_end_date" placeholder="Enter offer price" aria-label="offer_price"
+                                            aria-describedby="product-discount-addon" name="offer_end_date"
+                                            value="{{ old('offer_end_date') }}">
+                                        @error('offer_end_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="row mb-3">
+                            <div class="col-lg-6 col-sm-12">
+                                <div>
+                                    <h5 class="fs-14 text-muted mb-2">Color</h5>
+                                    <div class="classic-colorpicker"></div>
+                                    <input type="hidden" name="color" id="color" value="{{ old('color') }}">
+                                </div>
+                            </div>
+                        </div> --}}
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="form-check form-switch form-switch-info">
+                                    <label class="form-check-label" for="flexSwitchCheckChecked">Allow Backorder</label>
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked" checked name="allow_backorder">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- end card -->
-                <div class="text-end mb-3">
-                    <button type="submit" class="btn btn-success w-sm">Submit</button>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-box-seam"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Product Attributes</h5>
+                                    <p class="text-muted mb-0">Add attributes by clicking the plus button.</p>
+                                </div>
+                                <div class="">
+                                    <button id="add-row-btn" class="btn btn-sm btn-info rounded-pill"><i
+                                            class="bi bi-plus-circle align-middle rounded-pill fs-16 me-1"></i>Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="container">
+                                <div class="row mb-3">
+                                    <div class="col-11 px-0">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
+                                                <div class="form-group">
+                                                    <input type="text" name="attribute[]" placeholder="Attribute"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
+                                                <div class="form-group">
+                                                    <input type="text" name="value[]" placeholder="Value"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-1 align-items-center d-flex justify-content-center">
+                                        <button onclick="deleteRow(this)" class="btn btn-sm btn-danger rounded-pill">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="col-xl-9 col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-box-seam"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Product Attributes</h5>
+                                    <p class="text-muted mb-0">Add attributes by clicking the plus button.</p>
+                                </div>
+                                <div class="">
+                                    <button id="add-row-btn" class="btn btn-sm btn-info rounded-pill "><i
+                                            class="bi bi-plus-circle align-middle rounded-pill fs-16 me-2"></i>Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="seo_title">SEO Title</label>
+                                <input type="text" class="form-control" id="seo_title" placeholder="Enter SEO title"
+                                    name="seo_title" value="{{ old('seo_title') }}" required>
+                                @error('seo_title')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="seo_description">SEO Description</label>
+                                <textarea id="seo_description" name="seo_description" class="form-control" placeholder="SEO Description">{{ old('seo_description') }}</textarea>
+                                @error('seo_description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
             </div>
             <!-- end col -->
 
@@ -317,21 +424,19 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label">Status</label>
-
                             <select class="form-select" id="choices-publish-status-input" data-choices
-                                data-choices-search-false>
-                                <option value="Published" selected>Published</option>
-                                <option value="Scheduled">Scheduled</option>
-                                <option value="Draft">Draft</option>
+                                data-choices-search-false name="status">
+                                <option value="1" selected>Active</option>
+                                <option value="0">InActive</option>
                             </select>
                         </div>
 
                         <div>
                             <label for="choices-publish-visibility-input" class="form-label">Visibility</label>
-                            <select class="form-select" id="choices-publish-visibility-input" data-choices
-                                data-choices-search-false>
-                                <option value="Public" selected>Public</option>
-                                <option value="Hidden">Hidden</option>
+                            <select class="form-select visibility" name="visibility"
+                                id="choices-publish-visibility-input" data-choices data-choices-search-false>
+                                <option value="1">Public</option>
+                                <option value="0" selected>Hidden</option>
                             </select>
                         </div>
                     </div>
@@ -339,7 +444,7 @@
                 </div>
                 <!-- end card -->
 
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Publish Schedule</h5>
                     </div>
@@ -352,7 +457,7 @@
                                 data-enable-time>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- end card -->
 
 
@@ -364,7 +469,8 @@
                         <div class="hstack gap-3 align-items-start">
                             <div class="flex-grow-1">
                                 <input class="form-control" data-choices data-choices-multiple-remove="true"
-                                    placeholder="Enter tags" type="text" value="Cotton">
+                                    placeholder="Enter tags" type="text" value="{{ old('tags') }}"
+                                    id="product_tags" name="tags">
                             </div>
                         </div>
                     </div>
@@ -378,7 +484,8 @@
                     </div>
                     <div class="card-body">
                         <p class="text-muted mb-2">Add short description for product</p>
-                        <textarea class="form-control" placeholder="Must enter minimum of a 100 characters" rows="3"></textarea>
+                        <textarea class="form-control" placeholder="Must enter minimum of a 100 characters" rows="3"
+                            name="short_description">{{ old('short_description') }}</textarea>
                     </div>
                     <!-- end card body -->
                 </div>
@@ -387,17 +494,326 @@
             </div>
             <!-- end col -->
         </div>
+        <div class="d-flex justify-content-center my-5">
+            <button type="submit" class="btn btn-success btn-animation ">Add Product</button>
+        </div>
         <!-- end row -->
     </form>
 @endsection
 @section('scripts')
     <!-- ckeditor -->
     <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/ckeditor.js') }}"></script>
-
     <!-- dropzone js -->
     <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
     <!-- create-product -->
-    <script src="{{ URL::asset('build/js/backend/create-product.init.js') }}"></script>
+    {{-- <script src="{{ URL::asset('build/js/backend/create-product.init.js') }}"></script> --}}
+    <!-- Modern colorpicker bundle -->
+    <script src="{{ URL::asset('build/libs/@simonwep/pickr.min.js') }}"></script>
+    <script type='text/javascript' src='{{ asset('backend/build/libs/flatpickr/flatpickr.min.js') }}'></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#ckeditor-classic'))
+            .then(function(editor) {
+                editor.ui.view.editable.element.style.height = '200px';
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the database timestamp or old value from the Blade template
+            var oldOfferStartDate = "{{ old('offer_start_date') ?? 'today' }}";
+            var oldOfferEndDate = "{{ old('offer_end_date') ?? 'today' }}";
+
+            // Initialize Flatpickr datetime picker
+            flatpickr("#offer_start_date", {
+                minDate: "today",
+                defaultDate: oldOfferStartDate, // Set the default date and time
+                time_24hr: true
+            });
+
+            // Initialize Flatpickr datetime picker
+            flatpickr("#offer_end_date", {
+                minDate: "today",
+                defaultDate: oldOfferEndDate, // Set the default date and time
+                time_24hr: true
+            });
+
+            new Choices('#product_tags', {
+                removeItemButton: true,
+                delimiter: ',',
+                editItems: true, // Allow editing existing tags
+                maxItemCount: 15, // Optional: Set a maximum number of tags
+                placeholder: 'Add product tags (e.g., shirt, blue, cotton)',
+            });
+
+            // Initialize Choices for Store dropdown
+            new Choices('.store', {
+                searchEnabled: true,
+            });
+
+            // Function to initialize or update Choices
+            function updateChoices(selector, data, placeholder, isDisabled = false) {
+                let choicesInstance = $(selector).data('choicesInstance');
+
+                if (choicesInstance) {
+                    choicesInstance.clearStore();
+                    choicesInstance.clearChoices();
+                } else {
+                    choicesInstance = new Choices(selector, {
+                        searchEnabled: true,
+                        placeholder: true,
+                        placeholderValue: placeholder,
+                    });
+                    $(selector).data('choicesInstance', choicesInstance);
+                }
+
+                // Add the options
+                if (data.length > 0) {
+                    choicesInstance.setChoices(data, 'value', 'label', true);
+                }
+
+                // Disable or enable the dropdown based on the isDisabled flag
+                if (isDisabled) {
+                    choicesInstance.disable();
+                } else {
+                    choicesInstance.enable();
+                }
+
+                // Set placeholder
+                choicesInstance.setChoiceByValue('');
+            }
+
+            // Function to fetch and populate dropdown options
+            function fetchDropdownOptions(url, params, selector, placeholder) {
+                $.ajax({
+                    method: 'GET',
+                    url: url,
+                    data: params,
+                    success: function(data) {
+                        // Populate the dropdown with new options
+                        updateChoices(selector, data.map(item => ({
+                            value: item.id,
+                            label: item.name,
+                        })), placeholder, false);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // Initial setup: disable category and subcategory
+            updateChoices('.category', [], 'Select category', true);
+            updateChoices('.sub_category', [], 'Select SubCategory', true);
+
+            // Store change event to load categories
+            $('body').on('change', '.store', function(e) {
+                const storeId = $(this).val();
+
+                if (storeId) {
+                    // Fetch and enable category dropdown
+                    fetchDropdownOptions("{{ route('admin.product.get-categories') }}", {
+                        id: storeId
+                    }, '.category', 'Select category');
+
+                    // Disable subcategory dropdown
+                    updateChoices('.sub_category', [], 'Select SubCategory', true);
+                } else {
+                    // Disable both category and subcategory dropdowns
+                    updateChoices('.category', [], 'Select category', true);
+                    updateChoices('.sub_category', [], 'Select SubCategory', true);
+                }
+            });
+
+            // Category change event to load subcategories
+            $('body').on('change', '.category', function(e) {
+                const categoryId = $(this).val();
+
+                if (categoryId) {
+                    // Fetch and enable subcategory dropdown
+                    fetchDropdownOptions("{{ route('admin.product.get-sub-categories') }}", {
+                        id: categoryId
+                    }, '.sub_category', 'Select SubCategory');
+                } else {
+                    // Disable subcategory dropdown
+                    updateChoices('.sub_category', [], 'Select SubCategory', true);
+                }
+            });
+
+            // Initialize color picker
+            // var pickr = Pickr.create({
+            //     el: ".classic-colorpicker",
+            //     theme: "classic",
+            //     default: "#405189",
+            //     swatches: [
+            //         "rgba(244, 67, 54, 1)",
+            //         "rgba(233, 30, 99, 0.95)",
+            //         "rgba(156, 39, 176, 0.9)",
+            //         "rgba(103, 58, 183, 0.85)",
+            //         "rgba(63, 81, 181, 0.8)",
+            //         "rgba(33, 150, 243, 0.75)",
+            //         "rgba(3, 169, 244, 0.7)",
+            //         "rgba(0, 188, 212, 0.7)",
+            //         "rgba(0, 150, 136, 0.75)",
+            //         "rgba(76, 175, 80, 0.8)",
+            //         "rgba(139, 195, 74, 0.85)",
+            //         "rgba(205, 220, 57, 0.9)",
+            //         "rgba(255, 235, 59, 0.95)",
+            //         "rgba(255, 193, 7, 1)",
+            //     ],
+            //     components: {
+            //         // Main components
+            //         preview: true,
+            //         opacity: true,
+            //         hue: true,
+
+            //         // Input / output Options
+            //         interaction: {
+            //             hex: true,
+            //             rgba: true,
+            //             hsva: true,
+            //             input: true,
+            //             clear: true,
+            //             save: true,
+            //         },
+            //     },
+            // });
+
+            // pickr.on('save', (color, instance) => {
+            //     // Get the selected color in HEX format
+            //     var selectedColor = color.toHEXA().toString();
+
+            //     // Set the value of the hidden input field with id 'color'
+            //     document.getElementById('color').value = selectedColor;
+            // }).on('clear', instance => {
+            //     console.log('Event: "clear"', instance);
+            // });
+        });
+
+        // Ensure Dropzone is available as a global variable
+        var thumbnailArray = [];
+        var uploadedFilePaths = []; // Keep track of uploaded file paths
+
+        // Select all elements with the class 'my-dropzone' and initialize Dropzone for each
+        var dropzoneElements = document.querySelectorAll("div.my-dropzone");
+        dropzoneElements.forEach(function(dropzoneElement) {
+            var myDropzone = new Dropzone(dropzoneElement, {
+                url: "{{ route('admin.image.store') }}",
+                addRemoveLinks: true,
+                uploadMultiple: false,
+                maxFilesize: 20,
+                createImageThumbnails: true,
+                maxThumbnailFilesize: 0.2,
+                thumbnailWidth: 120,
+                thumbnailHeight: 120,
+                acceptedFiles: ".jpeg,.jpg,.png,.gif,.webp",
+
+                removedfile: function(file) {
+                    /// Remove the file from the array when removed
+                    var index = uploadedFilePaths.indexOf(file.path);
+                    if (index !== -1) {
+                        uploadedFilePaths.splice(index, 1);
+                    }
+                    file.previewElement.remove();
+                    thumbnailArray = [];
+                    removeFileFromServer(JSON.parse(file.xhr.response).path.replace(/\\/g, '/'));
+
+                },
+                sending: function(file, xhr, formData) {
+                    // Append CSRF token to the request headers
+                    formData.append("_token", "{{ csrf_token() }}");
+                    formData.append("path", 'uploads/products');
+                },
+                success: function(file, response) {
+                    // Handle the successful upload, you can use response.path to get the file path
+                    console.log('File uploaded successfully:', response.path);
+
+                    uploadedFilePaths.push(response.path);
+
+                    // Update the hidden input field with the new paths as a comma-separated string
+                    $('#images').val(uploadedFilePaths.join(','));
+
+                    console.log($('#images').val());
+                },
+
+            });
+
+            myDropzone.on("thumbnail", function(file, dataUrl) {
+                // Handle thumbnail generation
+                thumbnailArray.push(dataUrl);
+            });
+
+        });
+
+        // myDropzone.on("thumbnail", function(file, dataUrl) {
+        //     // Handle thumbnail generation
+        //     thumbnailArray.push(dataUrl);
+        // });
+
+        function removeFileFromServer(url) {
+            console.log(url);
+            // Make an AJAX request to delete the file
+            $.ajax({
+                url: "{{ route('admin.image.delete') }}",
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                },
+                data: {
+                    _method: 'DELETE',
+                    file_path: url,
+                },
+                success: function(response) {
+                    console.log(response.message);
+                },
+                error: function(error) {
+                    console.error('Error removing file:', error.responseText);
+                }
+            });
+        }
+
+        document.getElementById('add-row-btn').addEventListener('click', function(event) {
+            addRow();
+            event.preventDefault(); // Prevent default behavior (scrolling to top)
+        });
+
+        function addRow() {
+            var container = document.getElementById('container');
+            var newRow = document.createElement('div');
+            newRow.classList.add('row', 'mb-3');
+            newRow.innerHTML = `
+        <div class="col-11 px-0">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
+                                                <div class="form-group">
+                                                    <input type="text" name="attribute[]" placeholder="Attribute"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
+                                                <div class="form-group">
+                                                    <input type="text" name="value[]" placeholder="Value"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-1 align-items-center d-flex justify-content-center">
+                                        <button onclick="deleteRow(this)" class="btn btn-sm btn-danger rounded-pill">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+    `;
+
+            container.appendChild(newRow);
+        }
+
+        function deleteRow(btn) {
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
 
     <!-- App js -->
     <script src="{{ URL::asset('build/js/app.js') }}"></script>

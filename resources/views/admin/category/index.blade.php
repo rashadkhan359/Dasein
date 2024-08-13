@@ -5,9 +5,79 @@
     <link href="{{ asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="{{ asset('backend/build/libs/dropzone/dropzone.css') }}">
+    <style>
+        /* Basic Rules */
+        .switch input {
+            display: none;
+        }
+
+        .switch {
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            margin: 8px;
+            transform: translateY(50%);
+            position: relative;
+        }
+
+        /* Style Wired */
+        .slider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 30px;
+            box-shadow: 0 0 0 2px #777, 0 0 4px #777;
+            cursor: pointer;
+            border: 4px solid transparent;
+            overflow: hidden;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background: #777;
+            border-radius: 30px;
+            transform: translateX(-20px);
+            transition: .4s;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+            background: limeGreen;
+        }
+
+        input:checked+.slider {
+            box-shadow: 0 0 0 2px limeGreen, 0 0 2px limeGreen;
+        }
+
+        /* Style Flat */
+        .switch.flat .slider {
+            box-shadow: none;
+        }
+
+        .switch.flat .slider:before {
+            background: #FFF;
+        }
+
+        .switch.flat input:checked+.slider:before {
+            background: white;
+        }
+
+        .switch.flat input:checked+.slider {
+            background: limeGreen;
+        }
+    </style>
 @endsection
 @section('content')
     <x-breadcrumb title="Categories" pagetitle="Products" />
+    @if($errors->any())
+        {{ $errors }}
+    @endif
     <div class="row">
         <div class="col-xxl-3">
             @include('admin.category.create')
@@ -149,10 +219,12 @@
                         <button type="button" class="btn w-sm btn-light btn-hover"
                             data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn w-sm btn-danger btn-hover remove-list-keep"
-                            id="remove-category-keep" data-route="{{ url('/admin/category') }}">Yes<br><span style="font-size:12px;">(Keep
+                            id="remove-category-keep" data-route="{{ url('/admin/category') }}">Yes<br><span
+                                style="font-size:12px;">(Keep
                                 SubCategory)</span></button>
                         <button type="button" class="btn w-sm btn-danger btn-hover remove-list-delete"
-                            id="remove-category-delete" data-route="{{ url('/admin/category/delete') }}">Yes<br><span style="font-size:12px;">(Delete
+                            id="remove-category-delete" data-route="{{ url('/admin/category/delete') }}">Yes<br><span
+                                style="font-size:12px;">(Delete
                                 SubCategory)</span></button>
                     </div>
                 </div>
@@ -166,6 +238,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4>Edit Category</h4>
                     <button type="button" class="btn-close" id="close-editcategoryModal" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -174,12 +247,24 @@
                         @method('PUT')
                         @csrf
                         <div class="row">
+                            <div class="col-xxl-12 col-lg-6 border-top border-bottom mb-3">
+                                <div>
+                                        <label for="editStatus" class="form-label">Status</label>
+                                        <label class="switch" for="editStatus">
+                                            <input type="checkbox" id="editStatus"  name="status">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <div class="script">
+                                        </div>
+                                    </div>
+                            </div>
                             <div class="col-xxl-12 col-lg-6">
                                 <div class="mb-3">
                                     <label for="editName" class="form-label">Category Name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
                                         id="editName" name="name" placeholder="Enter Name"
+                                        value="tName" name="name" placeholder="Enter Name"
                                         value="{{ old('name') }}">
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -294,6 +379,7 @@
                     "subCategory": {!! json_encode($category->sub_categories->pluck('name')) !!},
                     "description": "{{ $category->description }}",
                     "categoryEditRoute": "{{ route('admin.category.update', $category->id) }}",
+                    "status": "{{ $category->status }}",
                 },
             @endforeach
         ];

@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'unique:stores,slug'],
             'image' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
         ];

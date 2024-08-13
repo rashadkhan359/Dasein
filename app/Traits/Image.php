@@ -2,9 +2,8 @@
 
 namespace App\Traits;
 
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Image
 {
@@ -32,14 +31,15 @@ trait Image
      */
     public function destroyImage($filePath)
     {
-
         $fullPath = public_path($filePath);
-
         if (File::exists($fullPath)) {
             // Delete the file from the server
             File::delete($fullPath);
             // Optionally, you can also remove the file entry from the database if needed
             // Your code here...
+            return response()->json(['message' => 'File deleted successfully.'], Response::HTTP_OK);
+        }else{
+            return response()->json(['message' => 'File not found.'], Response::HTTP_NOT_FOUND);
         }
     }
 }

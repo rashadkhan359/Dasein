@@ -31,7 +31,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">{{ __('t-menu') }}</span></li>
                 <li class="nav-item">
-                    <a href="index" class="nav-link menu-link"> <i class="bi bi-speedometer2"></i> <span data-key="t-dashboard">{{ __('t-dashboard') }}</span> <span class="badge badge-pill bg-danger-subtle text-danger" data-key="t-hot">{{ __('t-hot') }}</span></a>
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link menu-link {{ setActive(['admin.dashboard']) }}"> <i class="bi bi-speedometer2"></i> <span data-key="t-dashboard">{{ __('t-dashboard') }}</span> <span class="badge badge-pill bg-danger-subtle text-danger" data-key="t-hot">{{ __('t-hot') }}</span></a>
                 </li>
 
                 <li class="nav-item">
@@ -54,7 +54,7 @@
                         'admin.sub-category.*'
                     ]) }}" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="{{ isExpanded([
                         'admin.store.*',
-                        // 'admin.product.*',
+                        'admin.product.*',
                         'admin.category.*',
                         'admin.sub-category.*'
                     ]) }}" aria-controls="sidebarProducts">
@@ -62,7 +62,7 @@
                     </a>
                     <div class="collapse menu-dropdown {{ setShow([
                         'admin.store.*',
-                        // 'admin.product.*',
+                        'admin.product.*',
                         'admin.category.*',
                         'admin.sub-category.*'
                     ]) }}" id="sidebarProducts">
@@ -77,7 +77,7 @@
                                 <a href="product-overview" class="nav-link" data-key="t-overview">{{ __('t-overview') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="product-create" class="nav-link" data-key="t-create-product">{{ __('t-create-product') }}</a>
+                                <a href="{{ route('admin.product.create') }}" class="nav-link {{ setActive(['admin.product.create']) }}" data-key="t-create-product">{{ __('t-create-product') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('admin.store.index') }}" class="nav-link {{ setActive(['admin.store.*']) }}" data-key="t-stores">{{ __('t-stores') }}</a>
@@ -176,7 +176,7 @@
                     <a href="reviews-ratings" class="nav-link menu-link"><i class="bi bi-star"></i> <span data-key="t-reviews-ratings">{{ __('t-reviews-ratings') }}</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="brands" class="nav-link menu-link"><i class="bi bi-shop"></i> <span data-key="t-brands">{{ __('t-brands') }}</span> </a>
+                    <a href="{{ route('admin.brand.index') }}" class="nav-link menu-link {{ setActive(['admin.brand.*']) }}"><i class="bi bi-shop"></i> <span data-key="t-brands">{{ __('t-brands') }}</span> </a>
                 </li>
                 <li class="nav-item">
                     <a href="statistics" class="nav-link menu-link"><i class="bi bi-pie-chart"></i> <span data-key="t-statistics">{{ __('t-statistics') }}</span> </a>

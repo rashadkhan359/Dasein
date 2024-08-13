@@ -23,7 +23,7 @@ class SubCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'unique:sub_categories,slug'],
             'category_id' => ['required'],
             'image' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],

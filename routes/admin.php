@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\StoreController;
@@ -30,3 +32,12 @@ Route::post('category/toggle/{category}', [StoreController::class, 'toggle'])->n
 
 Route::resource('sub-category', SubCategoryController::class);
 Route::post('sub-category/toggle/{sub_category}', [SubCategoryController::class, 'toggle'])->name('sub-category.toggle');
+
+Route::resource('brand', BrandController::class);
+Route::post('brand/toggle/{brand}', [SubCategoryController::class, 'toggle'])->name('sub-category.toggle');
+
+/** Product Routes */
+Route::get('product/get-categories', [ProductController::class, 'getCategories'])->name('product.get-categories');
+Route::get('product/get-sub-categories', [ProductController::class, 'getSubCategories'])->name('product.get-sub-categories');
+Route::resource('product', ProductController::class);
+Route::post('brand/toggle/{brand}', [ProductController::class, 'toggle'])->name('product.toggle');

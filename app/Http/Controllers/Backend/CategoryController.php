@@ -74,6 +74,7 @@ class CategoryController extends Controller
             $this->destroyImage($category->image);
         }
 
+        $request->merge(['status' => $request->input('status') ? 1 : 0 ]);
         $category->update($request->all());
 
         toastr()->success(__('Category updated successfully.'));
