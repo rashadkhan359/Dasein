@@ -119,6 +119,6 @@
         </footer>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ URL::asset('backend/build/js/pages/password-addon.init.js') }}"></script>
-@endsection
+@endpush

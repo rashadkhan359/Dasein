@@ -48,10 +48,10 @@
     </div>
     <!-- end pagination-element -->
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- brands list -->
     <script>
         var url = "{{ url('/') }}";
     </script>
     <script src="{{ URL::asset('build/js/backend/brands-list.init.js') }}"></script>
-@endsection
+@endpush

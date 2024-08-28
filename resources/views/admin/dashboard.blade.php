@@ -1210,7 +1210,7 @@
         </div> <!-- .col-->
     </div> <!-- end row-->
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- apexcharts -->
     <script src="{{ URL::asset('backend/build/libs/apexcharts/apexcharts.min.js') }}"></script>
 
@@ -1569,4 +1569,4 @@
             chart.render();
         }
     </script>
-@endsection
+@endpush

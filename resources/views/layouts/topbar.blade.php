@@ -1,5 +1,5 @@
 @php
-    $categories = \App\Models\Category::where('status', 1)->get();
+    $categories = \App\Models\Category::with(['subCategories'])->where('status', 1)->get();
 @endphp
 @section('css')
 <style>
@@ -272,7 +272,7 @@
                                         <div class="col-lg-6">
                                             <div class="py-3">
                                                 <ul class="dropdown-menu-list list-unstyled mb-0">
-                                                    @forelse ($category->sub_categories as $sub_category)
+                                                    @forelse ($category->subCategories->where('status', 1) as $sub_category)
                                                     <li>
                                                         <p class="nav-item"
                                                             data-key="t-checkout-pages">

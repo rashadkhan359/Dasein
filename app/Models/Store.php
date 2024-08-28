@@ -16,4 +16,9 @@ class Store extends Model
         'description',
         'status',
     ];
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 }

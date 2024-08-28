@@ -62,6 +62,6 @@
         @include('layouts.footer-without-auth')
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ URL::asset('build/js/pages/password-addon.init.js') }}"></script>
-@endsection
+@endpush

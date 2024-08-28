@@ -13,6 +13,7 @@
 
     <!-- head css -->
     @include('admin/layouts.head-css')
+    @livewireStyles
 </head>
 
 <body>

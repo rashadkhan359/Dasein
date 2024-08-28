@@ -117,14 +117,15 @@ class CategoryController extends Controller
 
         // toastr()->success(__('Category deleted successfully'));
 
-        return response(['status' => 'success', 'message' => 'Category deleted successfully'], Response::HTTP_OK);
+        return response(['status' => 'success', 'message' => 'Category
+        deleted successfully'], Response::HTTP_OK);
     }
 
     public function destroyWithSubCategory(string $id){
         $category = Category::findOrFail($id);
 
         // Delete all associated subcategories
-        $category->sub_categories()->delete();
+        $category->subCategories()->delete();
 
         if($category->image){
             $this->destroyImage($category->image);

@@ -285,7 +285,7 @@ if (document.getElementById("product-list")) {
                                 <a class="dropdown-item" onClick="editProductList('+ row.id + ')" href="product-create.html"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a>\
                             </li>\
                             <li>\
-                                <a class="dropdown-item remove-list" onClick="removeItem('+ row.id +')" data-bs-toggle="modal" href="#removeItemModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>\
+                                <a class="dropdown-item remove-list" onClick="removeItem('+ row.id + ')" data-bs-toggle="modal" href="#removeItemModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>\
                             </li>\
                         </ul>\
                     </div>');

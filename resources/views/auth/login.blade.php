@@ -1,7 +1,6 @@
 @extends('layouts.master-auth')
 @section('title') Login @endsection
 @section('content')
-
     <div class="w-100">
         <div class="container">
             <div class="row justify-content-center">
@@ -113,7 +112,7 @@
         </footer>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ URL::asset('build/js/pages/password-addon.init.js') }}"></script>
     <script>
         function showPassword(id) {
@@ -130,4 +129,4 @@
             icon.classList.toggle("ri-eye-off-fill", isPasswordVisible);
         }
     </script>
-@endsection
+@endpush

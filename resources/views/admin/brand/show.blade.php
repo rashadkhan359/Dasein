@@ -182,7 +182,7 @@
         </div><!-- end col -->
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- App js -->
     {{-- <script src="{{ URL::asset('build/js/app.js') }}"></script> --}}
-@endsection
+@endpush

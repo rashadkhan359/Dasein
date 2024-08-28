@@ -143,69 +143,7 @@
                                     <div class="error-msg mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card -->
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm">
-                                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                                        <i class="bi bi-images"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="card-title mb-1">Product Gallery</h5>
-                                <p class="text-muted mb-0">Add product gallery images.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <input type="hidden" name="images" id="images" value="{{ old('images') }}">
-
-                            @foreach (explode(',', old('images')) as $image)
-                                <img src="{{ asset('storage/' . $image) }}" alt="" height="200"
-                                    class="card-img-top img-fluid" id="image-thumbnail"
-                                    data-base-url="{{ asset('storage/' . $image) }}">
-                            @endforeach
-
-                        <div class="dropzone my-dropzone text-center">
-                            <div class="dz-message">
-                                <div class="mb-3">
-                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                </div>
-
-                                <h5>Drop files here or click to upload.</h5>
-                            </div>
-                        </div>
-                        <div class="error-msg mt-1">Please add a product images.</div>
-                    </div>
-                </div>
-                <!-- end card -->
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm">
-                                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                                        <i class="bi bi-list-ul"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="card-title mb-1">General Information</h5>
-                                <p class="text-muted mb-0">Fill all information below.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row ">
-                            <div class="col-lg-6">
+                            <div class="col-xxl-6 col-sm-12 mb-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="manufacturer">Manufacturer</label>
                                     <input type="text" class="form-control @error('manufacturer') is-invalid @enderror"
@@ -216,161 +154,20 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <!-- end row -->
-
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="stocks">Stocks</label>
-                                    <input type="number" class="form-control @error('stock_qty') is-invalid @enderror"
-                                        id="stocks" placeholder="Stocks" name="stock_qty"
-                                        value="{{ old('stock_qty') }}">
-                                    @error('stock_qty')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="product-price-input">Price</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon">$</span>
-                                        <input type="text" class="form-control @error('price') is-invalid @enderror"
-                                            id="product-price-input" name="price" placeholder="Enter price"
-                                            value="{{ old('price') }}" aria-label="Price"
-                                            aria-describedby="product-price-addon">
-                                        @error('price')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end col -->
-                        </div>
-                        <!-- end row -->
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="product-discount-input">Offer Price</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon">$</span>
-                                        <input type="text"
-                                            class="form-control @error('offer_price') is-invalid @enderror"
-                                            id="offer_price" placeholder="Enter offer price"
-                                            value="{{ old('offer_price') }}" aria-label="offer_price"
-                                            aria-describedby="product-discount-addon" name="offer_price">
-                                        @error('offer_price')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="offer_start_date">Offer Start Date</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon"><i
-                                                class="bi bi-calendar-date"></i></span>
-                                        <input type="date"
-                                            class="form-control @error('offer_start_date') is-invalid @enderror"
-                                            id="offer_start_date" placeholder="Enter offer price"
-                                            aria-label="offer_start_date" aria-describedby="product-discount-addon"
-                                            name="offer_start_date" value="{{ old('offer_start_date') }}">
-                                        @error('offer_start_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="offer_end_date">Offer End Date</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon"><i
-                                                class="bi bi-calendar-date"></i></span>
-                                        <input type="date"
-                                            class="form-control @error('offer_end_date') is-invalid @enderror"
-                                            id="offer_end_date" placeholder="Enter offer price" aria-label="offer_price"
-                                            aria-describedby="product-discount-addon" name="offer_end_date"
-                                            value="{{ old('offer_end_date') }}">
-                                        @error('offer_end_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="row mb-3">
-                            <div class="col-lg-6 col-sm-12">
-                                <div>
-                                    <h5 class="fs-14 text-muted mb-2">Color</h5>
-                                    <div class="classic-colorpicker"></div>
-                                    <input type="hidden" name="color" id="color" value="{{ old('color') }}">
-                                </div>
-                            </div>
-                        </div> --}}
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <div class="form-check form-switch form-switch-info">
-                                    <label class="form-check-label" for="flexSwitchCheckChecked">Allow Backorder</label>
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                        id="flexSwitchCheckChecked" checked name="allow_backorder">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-9 col-lg-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm">
-                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                                            <i class="bi bi-box-seam"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="card-title mb-1">Product Attributes</h5>
-                                    <p class="text-muted mb-0">Add attributes by clicking the plus button.</p>
-                                </div>
-                                <div class="">
-                                    <button id="add-row-btn" class="btn btn-sm btn-info rounded-pill"><i
-                                            class="bi bi-plus-circle align-middle rounded-pill fs-16 me-1"></i>Add</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="container">
-                                <div class="row mb-3">
-                                    <div class="col-11 px-0">
-                                        <div class="row">
-                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
-                                                <div class="form-group">
-                                                    <input type="text" name="attribute[]" placeholder="Attribute"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
-                                                <div class="form-group">
-                                                    <input type="text" name="value[]" placeholder="Value"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-1 align-items-center d-flex justify-content-center">
-                                        <button onclick="deleteRow(this)" class="btn btn-sm btn-danger rounded-pill">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <div class="form-check form-switch form-switch-info">
+                                        <label class="form-check-label" for="flexSwitchCheckChecked">Allow
+                                            Backorder</label>
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                            id="flexSwitchCheckChecked" checked name="allow_backorder">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- end card -->
 
                 <div class="col-xl-9 col-lg-8">
                     <div class="card">
@@ -384,12 +181,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="card-title mb-1">Product Attributes</h5>
-                                    <p class="text-muted mb-0">Add attributes by clicking the plus button.</p>
-                                </div>
-                                <div class="">
-                                    <button id="add-row-btn" class="btn btn-sm btn-info rounded-pill "><i
-                                            class="bi bi-plus-circle align-middle rounded-pill fs-16 me-2"></i>Add</button>
+                                    <h5 class="card-title mb-1">Product SEO</h5>
                                 </div>
                             </div>
                         </div>
@@ -411,6 +203,201 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="col-xl-9 col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-list-ul"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Variant Information</h5>
+                                    <p class="text-muted mb-0">Fill all information below.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="stocks">Stocks</label>
+                                        <input type="number"
+                                            class="form-control @error('stock_qty') is-invalid @enderror" id="stocks"
+                                            placeholder="Stocks" name="stock_qty" value="{{ old('stock_qty') }}">
+                                        @error('stock_qty')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="product-price-input">Price</label>
+                                        <div class="input-group has-validation mb-3">
+                                            <span class="input-group-text" id="product-price-addon"><i class="bi bi-currency-rupee"></i></span>
+                                            <input type="text"
+                                                class="form-control @error('price') is-invalid @enderror"
+                                                id="product-price-input" name="price" placeholder="Enter price"
+                                                value="{{ old('price') }}" aria-label="Price"
+                                                aria-describedby="product-price-addon">
+                                            @error('price')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="product-discount-input">Offer Price</label>
+                                        <div class="input-group has-validation mb-3">
+                                            <span class="input-group-text" id="product-price-addon"><i class="bi bi-currency-rupee"></i></span>
+                                            <input type="text"
+                                                class="form-control @error('offer_price') is-invalid @enderror"
+                                                id="offer_price" placeholder="Enter offer price"
+                                                value="{{ old('offer_price') }}" aria-label="offer_price"
+                                                aria-describedby="product-discount-addon" name="offer_price">
+                                            @error('offer_price')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="offer_start_date">Offer Start Date</label>
+                                        <div class="input-group has-validation mb-3">
+                                            <span class="input-group-text" id="product-price-addon"><i
+                                                    class="bi bi-calendar-date"></i></span>
+                                            <input type="date"
+                                                class="form-control @error('offer_start_date') is-invalid @enderror"
+                                                id="offer_start_date" placeholder="Enter offer price"
+                                                aria-label="offer_start_date" aria-describedby="product-discount-addon"
+                                                name="offer_start_date" value="{{ old('offer_start_date') }}">
+                                            @error('offer_start_date')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="offer_end_date">Offer End Date</label>
+                                        <div class="input-group has-validation mb-3">
+                                            <span class="input-group-text" id="product-price-addon"><i
+                                                    class="bi bi-calendar-date"></i></span>
+                                            <input type="date"
+                                                class="form-control @error('offer_end_date') is-invalid @enderror"
+                                                id="offer_end_date" placeholder="Enter offer price"
+                                                aria-label="offer_price" aria-describedby="product-discount-addon"
+                                                name="offer_end_date" value="{{ old('offer_end_date') }}">
+                                            @error('offer_end_date')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-box-seam"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Product Attributes</h5>
+                                    <p class="text-muted mb-0">Add attributes by clicking the plus button.</p>
+                                </div>
+                                <div class="">
+                                    <button id="add-row-btn" class="btn btn-sm btn-info rounded-pill">
+                                        <i class="bi bi-plus-circle align-middle rounded-pill fs-16 me-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="container">
+                                <!-- Attribute rows will be added here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal for adding custom attribute -->
+                    <div class="modal fade" id="addAttributeModal" tabindex="-1"
+                        aria-labelledby="addAttributeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addAttributeModalLabel">Add Custom Attribute</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" id="customAttributeInput" class="form-control"
+                                        placeholder="Enter custom attribute name">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="saveCustomAttribute">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-images"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Product Gallery</h5>
+                                    <p class="text-muted mb-0">Add product gallery images.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <input type="hidden" name="images" id="images" value="{{ old('images') }}">
+
+                            @foreach (explode(',', old('images')) as $image)
+                                <img src="{{ asset('storage/' . $image) }}" alt="" height="200"
+                                    class="card-img-top img-fluid" id="image-thumbnail"
+                                    data-base-url="{{ asset('storage/' . $image) }}">
+                            @endforeach
+
+                            <div class="dropzone my-dropzone text-center">
+                                <div class="dz-message">
+                                    <div class="mb-3">
+                                        <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                    </div>
+
+                                    <h5>Drop files here or click to upload.</h5>
+                                </div>
+                            </div>
+                            <div class="error-msg mt-1">Please add a product images.</div>
+                        </div>
+                    </div>
+                    <!-- end card -->
+
                 </div>
                 <!-- end card -->
             </div>
@@ -500,7 +487,7 @@
         <!-- end row -->
     </form>
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- ckeditor -->
     <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/ckeditor.js') }}"></script>
     <!-- dropzone js -->
@@ -773,41 +760,76 @@
             });
         }
 
-        document.getElementById('add-row-btn').addEventListener('click', function(event) {
+        const container = document.getElementById('container');
+        const addRowBtn = document.getElementById('add-row-btn');
+        const saveCustomAttributeBtn = document.getElementById('saveCustomAttribute');
+        const customAttributeInput = document.getElementById('customAttributeInput');
+        const addAttributeModal = new bootstrap.Modal(document.getElementById('addAttributeModal'));
+
+        let attributes = ['Size', 'Color', 'Material']; // Initial preset attributes
+
+        addRowBtn.addEventListener('click', function(event) {
+            event.preventDefault();
             addRow();
-            event.preventDefault(); // Prevent default behavior (scrolling to top)
         });
 
-        function addRow() {
-            var container = document.getElementById('container');
-            var newRow = document.createElement('div');
+        saveCustomAttributeBtn.addEventListener('click', function() {
+            const newAttribute = customAttributeInput.value.trim();
+            if (newAttribute && !attributes.includes(newAttribute)) {
+                attributes.push(newAttribute);
+                addAttributeModal.hide();
+                addRow(newAttribute);
+                customAttributeInput.value = '';
+            }
+        });
+
+        function addRow(selectedAttribute = '') {
+            const newRow = document.createElement('div');
             newRow.classList.add('row', 'mb-3');
             newRow.innerHTML = `
-        <div class="col-11 px-0">
-                                        <div class="row">
-                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
-                                                <div class="form-group">
-                                                    <input type="text" name="attribute[]" placeholder="Attribute"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
-                                                <div class="form-group">
-                                                    <input type="text" name="value[]" placeholder="Value"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-1 align-items-center d-flex justify-content-center">
-                                        <button onclick="deleteRow(this)" class="btn btn-sm btn-danger rounded-pill">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-    `;
+            <div class="col-11 px-0">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
+                        <div class="form-group">
+                            <select name="attribute[]" class="form-select attribute-select">
+                                <option value="">Select Attribute</option>
+                                ${attributes.map(attr => `<option value="${attr}" ${selectedAttribute === attr ? 'selected' : ''}>${attr}</option>`).join('')}
+                                <option value="custom">Add Custom Attribute</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
+                        <div class="form-group">
+                            <input type="text" name="value[]" placeholder="Value" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 align-items-center d-flex justify-content-center">
+                <button class="btn btn-sm btn-danger rounded-pill delete-row">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+
+            const select = newRow.querySelector('.attribute-select');
+            select.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    addAttributeModal.show();
+                    this.value = ''; // Reset to empty after opening modal
+                }
+            });
+
+            const deleteBtn = newRow.querySelector('.delete-row');
+            deleteBtn.addEventListener('click', function() {
+                newRow.remove();
+            });
 
             container.appendChild(newRow);
         }
+
+        // Add initial row
+        addRow();
 
         function deleteRow(btn) {
             var row = btn.parentNode.parentNode;
@@ -817,4 +839,4 @@
 
     <!-- App js -->
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+@endpush

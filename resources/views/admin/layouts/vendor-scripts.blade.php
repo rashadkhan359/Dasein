@@ -6,7 +6,7 @@
 
 <script src="{{ URL::asset('backend/build/libs/simplebar/simplebar.min.js') }}"></script>
 
-<script src="{{ URL::asset('backend/build/js/plugins.js') }}"></script>
+{{-- <script src="{{ URL::asset('backend/build/js/plugins.js') }}"></script> --}}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.js"
     integrity="sha512-MnKz2SbnWiXJ/e0lSfSzjaz9JjJXQNb2iykcZkEY2WOzgJIWVqJBFIIPidlCjak0iTH2bt2u1fHQ4pvKvBYy6Q=="
@@ -18,5 +18,5 @@
 <script src="{{ URL::asset('backend/build/js/app.js') }}"></script>
 
 @toastifyJs
-
-@yield('scripts')
+@livewireScripts
+@stack('scripts')

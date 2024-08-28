@@ -5,17 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductAttribute extends Model
+class ProductVariantGallery extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
-        'attribute_name',
-        'attribute_value',
+        'product_variant_id',
+        'image_path',
+        'caption',
     ];
 
     public function product(){
         return $this->belongsTo(Product::class);
+    }
+
+    public function getImageUrlAttribute(){
+        return asset("storage/{$this->image_path}");
     }
 }

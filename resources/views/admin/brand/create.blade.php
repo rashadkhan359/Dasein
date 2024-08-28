@@ -216,7 +216,7 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- dropzone js -->
     <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -293,4 +293,4 @@
             });
         }
     </script>
-@endsection
+@endpush

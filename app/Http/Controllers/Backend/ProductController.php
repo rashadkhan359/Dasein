@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Actions\Product\CreateProduct;
+use App\Actions\Product\DeleteProduct;
+use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\CreateProductRequest;
 use App\Models\Brand;
@@ -19,7 +21,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.product.index');
     }
 
     /**
@@ -38,6 +40,7 @@ class ProductController extends Controller
     public function store(CreateProductRequest $request, CreateProduct $createProductAction)
     {
         $createProductAction->create($request);
+        return redirect()->route('admin.product.index')->with('success', 'Product added successfully.');
     }
 
     /**
@@ -45,7 +48,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('admin.product.product-overview', ['id' => $id]);
     }
 
     /**
@@ -53,7 +56,10 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $stores = Store::where('status', Status::ACTIVE)->get();
+        $brands = Brand::where('status', Status::ACTIVE)->get();
+        return view('admin.product.edit', compact('product', 'stores', 'brands'));
     }
 
     /**
@@ -69,7 +75,8 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        DeleteProduct::execute($product);
     }
 
     public function getCategories(Request $request){

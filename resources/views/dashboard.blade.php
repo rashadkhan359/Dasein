@@ -1134,7 +1134,7 @@
     </section>
     <!-- END INSTAGRAM -->
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- isotope-layout -->
     <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
 
@@ -1147,4 +1147,4 @@
     <script src="{{ URL::asset('build/js/frontend/landing-index.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/frontend/menu.init.js') }}"></script>
-@endsection
+@endpush

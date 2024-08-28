@@ -18,8 +18,15 @@ class Category extends Model
         'status',
     ];
 
-    public function sub_categories(){
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
+
+    public function subCategories()
+    {
         return $this->hasMany(SubCategory::class);
     }
+
 
 }

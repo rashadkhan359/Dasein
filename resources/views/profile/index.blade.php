@@ -1279,7 +1279,7 @@
         </x-slot>
     </x-main-modal>
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- landing-index js -->
     <script src="{{ asset('build/js/frontend/menu.init.js') }}"></script>
     <script>
@@ -1305,4 +1305,4 @@
             icon.classList.toggle("ri-eye-off-fill", isPasswordVisible);
         }
     </script>
-@endsection
+@endpush

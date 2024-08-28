@@ -36,11 +36,13 @@
                         <div class="mb-3">
                             <div>
                                 <label for="store" class="form-label">Category <span class="text-danger">*</span></label>
-                                <select class="form-select choices" id="category" data-choices
-                                    data-choices-search-false name="category_id">
+                                <select class="form-select choices" id="category" data-choices data-choices-search-false
+                                    name="category_id">
                                     <option selected value="">Choose Category</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id') === $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id') === $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -96,7 +98,7 @@
     </div>
 
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- Sweet Alerts js -->
     <script src="{{ asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <!-- dropzone js -->
@@ -198,4 +200,4 @@
             });
         }
     </script>
-@endsection
+@endpush

@@ -244,7 +244,7 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <!-- ckeditor -->
     <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/ckeditor.js') }}"></script>
     <!-- dropzone js -->
@@ -392,4 +392,4 @@
             });
         }
     </script>
-@endsection
+@endpush

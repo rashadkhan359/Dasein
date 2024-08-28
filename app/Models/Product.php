@@ -18,18 +18,13 @@ class Product extends Model
         'store_id',
         'category_id',
         'sub_category_id',
-        'stock_qty',
         'brand_id',
         'short_description',
         'long_description',
-        'video_link',
         'sku',
-        'price',
-        'offer_price',
-        'offer_start_date',
-        'offer_end_date',
         'product_type',
         'tags',
+        'is_custom',
         'manufacturer',
         'status',
         'is_approved',
@@ -38,6 +33,12 @@ class Product extends Model
         'publish_date',
         'seo_title',
         'seo_description',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'publish_date' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     protected static function boot()
@@ -58,11 +59,26 @@ class Product extends Model
         return $count ? "{$slug}-{$count}" : $slug;
     }
 
-    public function productGalleries(){
-        return $this->hasMany(ProductGallery::class);
+    public function productVariants(){
+        return $this->hasMany(ProductVariant::class);
     }
 
-    public function productAttributes(){
-        return $this->hasMany(ProductAttribute::class);
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function store(){
+        return $this->belongsTo(Store::class);
+    }
+
+    public function subCategory(){
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function getFormattedPublishDateAttribute(){
+        return $this->publish_date?->format('j F, Y');
+    }
+    public function getFormattedCreatedAtAttribute(){
+        return $this->created_at->format('j F, Y');
     }
 }

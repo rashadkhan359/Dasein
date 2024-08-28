@@ -293,8 +293,7 @@
                                     <div>
                                         <label for="editStore" class="form-label">Store <span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select choices" id="editStore" data-choices
-                                            data-choices-search-false name="store_id">
+                                        <select class="form-select" id="editStore" name="store_id">
                                             <option selected value="">Choose Store</option>
                                             @foreach ($stores as $store)
                                                 <option value="{{ $store->id }}">{{ $store->name }}</option>
@@ -360,7 +359,7 @@
     </div><!-- /.modal -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- Sweet Alerts js -->
     <script src="{{ asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -376,9 +375,9 @@
                     "categoryImg": "{{ asset('storage/' . $category->image) }}",
                     "categoryImgRaw": "{{ $category->image }}",
                     "categoryTitle": "{{ $category->name }}",
-                    "subCategory": {!! json_encode($category->sub_categories->pluck('name')) !!},
+                    "subCategory": {!! json_encode($category->subCategories->pluck('name')) !!},
                     "description": "{{ $category->description }}",
-                    "categoryEditRoute": "{{ route('admin.category.update', $category->id) }}",
+                    "categoryEditRoute": "{{ route('admin.category.update', ['category' => $category->id]) }}",
                     "status": "{{ $category->status }}",
                 },
             @endforeach
@@ -480,4 +479,4 @@
         }
     </script>
     <script src="{{ URL::asset('build/js/backend/product-categories.init.js') }}"></script>
-@endsection
+@endpush
