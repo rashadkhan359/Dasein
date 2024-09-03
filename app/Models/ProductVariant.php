@@ -30,13 +30,16 @@ class ProductVariant extends Model
             $productVariant->sku = uniqid();
         });
     }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'variant_tag');
+    }
 
-
-    public function productGalleries(){
+    public function galleries(){
         return $this->hasMany(ProductVariantGallery::class);
     }
 
-    public function productAttributes(){
+    public function attributes(){
         return $this->hasMany(ProductVariantAttribute::class);
     }
 }

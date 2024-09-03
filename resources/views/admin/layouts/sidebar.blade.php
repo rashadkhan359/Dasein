@@ -68,13 +68,7 @@
                     ]) }}" id="sidebarProducts">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="product-list" class="nav-link" data-key="t-list-view">{{ __('t-list-view') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="product-grid" class="nav-link" data-key="t-grid-view">{{ __('t-grid-view') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="product-overview" class="nav-link" data-key="t-overview">{{ __('t-overview') }}</a>
+                                <a href="{{ route('admin.product.index') }}" class="nav-link {{ setActive(['admin.product.index']) }}" data-key="t-products">{{ __('t-products') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('admin.product.create') }}" class="nav-link {{ setActive(['admin.product.create']) }}" data-key="t-create-product">{{ __('t-create-product') }}</a>

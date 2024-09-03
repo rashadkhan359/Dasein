@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Store extends Model
 {
@@ -21,4 +22,14 @@ class Store extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    public function getImageUrlAttribute(){
+        if(Str::startsWith($this->image, ['http', 'https'])){
+            return $this->image;
+        }
+
+        return asset("storage/{$this->image}");
+    }
+
+
 }

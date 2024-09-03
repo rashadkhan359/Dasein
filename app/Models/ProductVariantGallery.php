@@ -11,9 +11,14 @@ class ProductVariantGallery extends Model
 
     protected $fillable = [
         'product_variant_id',
+        'product_id',
         'image_path',
         'caption',
     ];
+
+    public function productVariant(){
+        return $this->belongsTo(ProductVariant::class);
+    }
 
     public function product(){
         return $this->belongsTo(Product::class);

@@ -59,9 +59,7 @@ class SliderController extends Controller
         // Create the new slider
         Slider::create($request->all());
 
-        toastr()->success(__("New slider added successfully"));
-
-        return redirect()->route('admin.slider.index');
+        return redirect()->route('admin.slider.index')->with('success', "Slider added successfully.");
     }
 
 
@@ -80,7 +78,6 @@ class SliderController extends Controller
     public function edit(string $id)
     {
         $active_slider_count = Slider::where('visibility', 1)->count();
-        // dd($active_slider_count);
         $slider = Slider::findOrFail($id);
         return view('admin.slider.edit', compact('active_slider_count', 'slider'));
     }
@@ -110,7 +107,7 @@ class SliderController extends Controller
 
         $slider->update($request->all());
 
-        toastr()->success(__('Slider updated successfully'));
+        flash()->success(__('Slider updated successfully'));
 
         return redirect()->route('admin.slider.index');
     }
@@ -128,7 +125,7 @@ class SliderController extends Controller
 
         $slider->delete();
 
-        toastr()->success(__('Slider deleted successfully'));
+        flash()->success(__('Slider deleted successfully'));
 
         return response(['status' => 'success', 'message' => 'Slider deleted successfully'], Response::HTTP_OK);
 

@@ -23,7 +23,7 @@ class SubCategoryDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
         ->addColumn('image', function ($query) {
-            return $img = $query->image ? "<img src='" . asset('storage/' . $query->image) . "'  width='150'/>" : 'No Image';
+            return $img = $query->image ? "<img src='" . $query->image_url . "'  width='100'/>" : 'No Image';
         })
         ->addColumn('created_at', function ($query) {
             return date("F d,Y", strtotime($query->created_at));

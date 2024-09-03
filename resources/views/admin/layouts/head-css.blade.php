@@ -10,4 +10,4 @@
 <link href="{{ URL::asset('backend/build/css/app.min.css') }}" rel="stylesheet" type="text/css">
 <!-- custom Css-->
 <link href="{{ URL::asset('backend/build/css/custom.min.css') }}" rel="stylesheet" type="text/css">
-@toastifyCss
+{{-- @toastifyCss --}}

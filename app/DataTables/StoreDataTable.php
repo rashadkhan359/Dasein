@@ -23,7 +23,7 @@ class StoreDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('image', function ($query) {
-                return $img = "<img src='" . asset('storage/' . $query->image) . "' width='150'/>";
+                return $img = "<img src='" . $query->image_url . "' width='100'/>";
             })
             ->addColumn('created_at', function ($query) {
                 return date("F d,Y", strtotime($query->created_at));

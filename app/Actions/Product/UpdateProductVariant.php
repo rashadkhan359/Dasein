@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
-class CreateProductVariant
+class UpdateProductVariant
 {
     protected $productService;
     public function __construct(ProductService $productService){
@@ -22,13 +22,12 @@ class CreateProductVariant
      * @param \App\Models\Product $product
      * @return void
      */
-    public function create(Request $request, Product $product)
+    public function create(Request $request, ProductVariant $productVariant)
     {
         DB::beginTransaction();
 
         try {
-            $productVariant = ProductVariant::create([
-                'product_id' => $product->id,
+            $productVariant->update([
                 'stock_qty' => $request->stock_qty,
                 'price' => $request->price,
                 'offer_price' => $request->offer_price,

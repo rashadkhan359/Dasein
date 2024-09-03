@@ -2,7 +2,6 @@
 @section('title', 'Edit Slider | Website')
 @section('css')
     <link rel="stylesheet" href="{{ asset('backend/build/libs/dropzone/dropzone.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 @endsection
 
 @section('content')
@@ -142,9 +141,9 @@
                                     <input type="hidden" name="image" id="image"
                                         value="{{ $slider->image }}" />
                                     @if ($slider->image)
-                                        <img src="{{ asset('storage/' . $slider->image) }}" alt=""
+                                        <img src="{{ $slider->image_url }}" alt=""
                                             height="200" class="card-img-top img-fluid" id="image-thumbnail"
-                                            data-base-url="{{ asset('') }}">
+                                            data-base-url="{{ $slider->image_url }}">
                                     @endif
                                     <div class="dropzone my-dropzone">
                                         <div class="dz-message">
@@ -238,8 +237,6 @@
                         <button type="submit" class="btn btn-secondary">Update</button>
                     </div>
                 </div>
-
-
             </form>
         </div>
     </div>

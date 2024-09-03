@@ -5,7 +5,7 @@ namespace App\Http\Requests\Backend;
 use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProductVariantRequest extends FormRequest
+class UpdateProductVariantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +23,14 @@ class CreateProductVariantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => ['required', 'exists:products,id'],
             'video_link' => ['nullable', 'string'],
             'images' => ['nullable', 'string'],
-            'price' => ['required'],
+            'price' => ['nullable'],
             'offer_price' => ['nullable'],
             'offer_start_date' => ['nullable'],
-            'tags' => ['nullable', 'string'],
             'offer_end_date' => ['nullable'],
-            'stock_qty' => ['required', 'integer'],
+            'stock_qty' => ['nullable', 'integer'],
+            'tags' => ['nullable', 'string'],
             'attribute' => ['nullable', 'array'],
             'attribute.*' => ['nullable', 'string'],
             'value' => ['nullable', 'array'],

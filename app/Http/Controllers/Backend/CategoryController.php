@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Actions\Category\DeleteCategory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\CategoryRequest;
 use App\Models\Category;
@@ -41,7 +42,7 @@ class CategoryController extends Controller
         // Create the new slider
         Category::create($request->all());
 
-        toastr()->success(__("New category added successfully."));
+        flash()->success(__("New category added successfully."));
 
         return redirect()->route('admin.category.index');
     }
@@ -77,7 +78,7 @@ class CategoryController extends Controller
         $request->merge(['status' => $request->input('status') ? 1 : 0 ]);
         $category->update($request->all());
 
-        toastr()->success(__('Category updated successfully.'));
+        flash()->success(__('Category updated successfully.'));
 
         return redirect()->route('admin.category.index');
     }
@@ -105,33 +106,20 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, DeleteCategory $deleteCategory)
     {
         $category = Category::findOrFail($id);
 
-        if($category->image){
-            $this->destroyImage($category->image);
-        }
-
-        $category->delete();
-
-        // toastr()->success(__('Category deleted successfully'));
+        $deleteCategory->execute($category);
 
         return response(['status' => 'success', 'message' => 'Category
         deleted successfully'], Response::HTTP_OK);
     }
 
-    public function destroyWithSubCategory(string $id){
+    public function destroyWithSubCategory(string $id, DeleteCategory $deleteCategory){
         $category = Category::findOrFail($id);
 
-        // Delete all associated subcategories
-        $category->subCategories()->delete();
-
-        if($category->image){
-            $this->destroyImage($category->image);
-        }
-
-        $category->delete();
+        $deleteCategory->execute($category, true);
 
         return response(['status' => 'success', 'message' => 'Category deleted successfully.'], Response::HTTP_OK);
     }

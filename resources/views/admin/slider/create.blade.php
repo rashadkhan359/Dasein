@@ -2,7 +2,6 @@
 @section('title', 'Slider | Website')
 @section('css')
     <link rel="stylesheet" href="{{ asset('backend/build/libs/dropzone/dropzone.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 @endsection
 
 @section('content')
@@ -12,7 +11,7 @@
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
-                        <li class="text-danger">{{ $error }}</li>
+                        <li class="text-danger fs-6 p-0 m-0">{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -299,6 +298,7 @@
                 thumbnailArray = [];
                 removeFileFromServer(file.path);
                 $('#image').val('');
+                console.log('Removed successfully.');
             },
             sending: function(file, xhr, formData) {
                 // Append CSRF token to the request headers
@@ -307,10 +307,11 @@
             },
             success: function(file, response) {
                 // Handle the successful upload, you can use response.path to get the file path
-                // console.log('File uploaded successfully:', response.path);
+                console.log('File uploaded successfully:', response.path);
 
                 // Set the value of the input field with uploaded file path
                 $('#image').val(response.path);
+                console.log($('#image').val());
             },
 
         });

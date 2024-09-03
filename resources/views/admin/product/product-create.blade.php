@@ -6,7 +6,6 @@
     <!-- extra css -->
     <link rel="stylesheet" href="{{ URL::asset('build/libs/@simonwep/classic.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('backend/build/libs/dropzone/dropzone.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 @endsection
 @section('content')
     <x-breadcrumb title="Create product" pagetitle="Product" />
@@ -239,7 +238,8 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="product-price-input">Price</label>
                                         <div class="input-group has-validation mb-3">
-                                            <span class="input-group-text" id="product-price-addon"><i class="bi bi-currency-rupee"></i></span>
+                                            <span class="input-group-text" id="product-price-addon"><i
+                                                    class="bi bi-currency-rupee"></i></span>
                                             <input type="text"
                                                 class="form-control @error('price') is-invalid @enderror"
                                                 id="product-price-input" name="price" placeholder="Enter price"
@@ -259,7 +259,8 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="product-discount-input">Offer Price</label>
                                         <div class="input-group has-validation mb-3">
-                                            <span class="input-group-text" id="product-price-addon"><i class="bi bi-currency-rupee"></i></span>
+                                            <span class="input-group-text" id="product-price-addon"><i
+                                                    class="bi bi-currency-rupee"></i></span>
                                             <input type="text"
                                                 class="form-control @error('offer_price') is-invalid @enderror"
                                                 id="offer_price" placeholder="Enter offer price"
@@ -495,7 +496,7 @@
     <!-- create-product -->
     {{-- <script src="{{ URL::asset('build/js/backend/create-product.init.js') }}"></script> --}}
     <!-- Modern colorpicker bundle -->
-    <script src="{{ URL::asset('build/libs/@simonwep/pickr.min.js') }}"></script>
+    {{-- <script src="{{ URL::asset('build/libs/@simonwep/pickr.min.js') }}"></script> --}}
     <script type='text/javascript' src='{{ asset('backend/build/libs/flatpickr/flatpickr.min.js') }}'></script>
     <script>
         ClassicEditor
@@ -810,7 +811,7 @@
                     <i class="bi bi-trash"></i>
                 </button>
             </div>
-        `;
+            `;
 
             const select = newRow.querySelector('.attribute-select');
             select.addEventListener('change', function() {
@@ -836,7 +837,4 @@
             row.parentNode.removeChild(row);
         }
     </script>
-
-    <!-- App js -->
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endpush

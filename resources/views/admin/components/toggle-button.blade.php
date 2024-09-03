@@ -71,14 +71,8 @@
         <span class="slider"></span>
     </label>
 </div>
-{{-- <div class="form-check form-switch">
-    <input type="checkbox" class="form-check-input" >
-    <label class="form-check-label" ></label>
-</div> --}}
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-    integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Flasher CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@flasher/flasher@1.2.4/dist/flasher.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#{{ $toggleId }}').change(function() {
@@ -93,11 +87,11 @@
                 success: function(response) {
                     // Optionally handle success response
                     console.log(response);
-                    toastr.success(response.success);
+                    flasher.success(response.success);
                 },
                 error: function(xhr) {
                     // Optionally handle error response
-                    toastr.error(xhr.responseJSON.error);
+                    flasher.error(xhr.responseJSON.error);
                 }
             });
         });

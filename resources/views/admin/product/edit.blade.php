@@ -1,23 +1,20 @@
 @extends('admin.layouts.master')
 @section('title')
-    Create product
+    Edit Product
 @endsection
 @section('css')
-    <!-- extra css -->
-    <link rel="stylesheet" href="{{ URL::asset('build/libs/@simonwep/classic.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('backend/build/libs/dropzone/dropzone.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 @endsection
 @section('content')
-    <x-breadcrumb title="Create product" pagetitle="Product" />
+    <x-breadcrumb title="Edit Product" pagetitle="Product" />
     @if ($errors->any())
         @foreach ($errors->all() as $error)
-            <p class="text-danger fs-5">{{ $error }}</p>
+            <p class="text-danger fw-light fs-8 m-0">*{{ $error }}</p>
         @endforeach
     @endif
     <form id="createproduct-form" action="{{ route('admin.product.update', ['product' => $product]) }}"
         class="needs-validation" method="POST">
         @csrf
+        @method('PUT')
         <div class="row">
             <div class="col-xl-9 col-lg-8">
                 <div class="card">
@@ -73,7 +70,10 @@
                                         name="store">
                                         <option value="">Select store</option>
                                         @foreach ($stores as $store)
-                                            <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                            <option value="{{ $store->id }}"
+                                                {{ $product->store_id == $store->id ? 'selected' : '' }}>
+                                                {{ $store->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -81,6 +81,9 @@
                                     <div class="error-msg mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <!-- Similar setup for Category and SubCategory -->
+
                             <div class="col-xxl-6 col-sm-12 mb-3">
                                 <div class="d-flex align-items-start">
                                     <div class="flex-grow-1">
@@ -95,12 +98,19 @@
                                     <select class="form-select category @error('category') is-invalid @enderror"
                                         id="category" name="category">
                                         <option value="">Select category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 @error('category')
                                     <div class="error-msg mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="col-xxl-6 col-sm-12 mb-3">
                                 <div class="d-flex align-items-start">
                                     <div class="flex-grow-1">
@@ -115,12 +125,19 @@
                                     <select class="form-select sub_category @error('sub_category') is-invalid @enderror"
                                         id="sub_category" name="sub_category">
                                         <option value="">Select SubCategory</option>
+                                        @foreach ($subCategories as $subCategory)
+                                            <option value="{{ $subCategory->id }}"
+                                                {{ $product->sub_category_id == $subCategory->id ? 'selected' : '' }}>
+                                                {{ $subCategory->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 @error('sub_category')
                                     <div class="error-msg mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="col-xxl-6 col-sm-12 mb-3">
                                 <div class="d-flex align-items-start">
                                     <div class="flex-grow-1">
@@ -149,7 +166,7 @@
                                     <label class="form-label" for="manufacturer">Manufacturer</label>
                                     <input type="text" class="form-control @error('manufacturer') is-invalid @enderror"
                                         id="manufacturer" name="manufacturer" placeholder="Enter manufacturer name"
-                                        value="{{ old('manufacturer') ?? $product->long_description }}">
+                                        value="{{ old('manufacturer') ?? $product->manufacturer }}">
                                     @error('manufacturer')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -157,7 +174,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12">
-                                    <div class="form-check form-switch form-switch-info">
+                                    <div class="form-check form-switch form-switch-warning form-switch-md">
                                         <label class="form-check-label" for="flexSwitchCheckChecked">Allow
                                             Backorder</label>
                                         <input class="form-check-input" type="checkbox" role="switch"
@@ -171,43 +188,40 @@
                 </div>
                 <!-- end card -->
 
-                <div class="col-xl-9 col-lg-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm">
-                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                                            <i class="bi bi-box-seam"></i>
-                                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="avatar-sm">
+                                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                        <i class="bi bi-box-seam"></i>
                                     </div>
                                 </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="card-title mb-1">Product SEO</h5>
-                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label" for="seo_title">SEO Title</label>
-                                <input type="text" class="form-control" id="seo_title" placeholder="Enter SEO title"
-                                    name="seo_title" value="{{ old('seo_title') ?? $product->long_description }}"
-                                    required>
-                                @error('seo_title')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="seo_description">SEO Description</label>
-                                <textarea id="seo_description" name="seo_description" class="form-control" placeholder="SEO Description">{{ old('seo_description') ?? $product->long_description }}</textarea>
-                                @error('seo_description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            <div class="flex-grow-1">
+                                <h5 class="card-title mb-1">Product SEO</h5>
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="seo_title">SEO Title</label>
+                            <input type="text" class="form-control" id="seo_title" placeholder="Enter SEO title"
+                                name="seo_title" value="{{ old('seo_title') ?? $product->seo_title }}" required>
+                            @error('seo_title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="seo_description">SEO Description</label>
+                            <textarea id="seo_description" name="seo_description" class="form-control" style="height:100px;"
+                                placeholder="SEO Description">{{ old('seo_description') ?? $product->seo_description }}</textarea>
+                            @error('seo_description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
-
             </div>
             <div class="col-xl-3 col-lg-4">
                 <div class="card">
@@ -260,6 +274,30 @@
                         <h5 class="card-title mb-0">Product Tags</h5>
                     </div>
                     <div class="card-body">
+                        <div class="d-flex flex-wrap mb-3">
+                            @php
+                                $colors = [
+                                    'primary',
+                                    'warning',
+                                    'danger',
+                                    'info',
+                                    'success',
+                                    'secondary',
+                                    'dark',
+                                    'light',
+                                ];
+                            @endphp
+                            @forelse ($product->tags as $tag)
+                                <span class="badge badge-label bg-{{ $colors[$tag->id % 7] }}">
+                                    <i class="mdi mdi-circle-medium me-1"></i>{{ $tag->name }}
+                                    <span class="delete-tag cursor-pointer" data-tag-id="{{ $tag->id }}"
+                                        data-url="{{ route('admin.product.tag.destroy', ['product' => $product]) }}"><i
+                                            class="mdi mdi-close"></i></span>
+                                </span>
+                            @empty
+                                <p>No tags added.</p>
+                            @endforelse
+                        </div>
                         <div class="hstack gap-3 align-items-start">
                             <div class="flex-grow-1">
                                 <input class="form-control" data-choices data-choices-multiple-remove="true"
@@ -286,215 +324,74 @@
                 <!-- end card -->
             </div>
         </div>
-        <div class="row">
-            <div class="col-xl-9 col-lg-8">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm">
-                                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                                        <i class="bi bi-list-ul"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="card-title mb-1">Variant Information</h5>
-                                <p class="text-muted mb-0">Fill all information below.</p>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="avatar-sm">
+                            <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                <i class="bi bi-box-seam"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-6 col-sm-12">
-                                <div class="mb-3">
-                                    <label class="form-label" for="stocks">Stocks</label>
-                                    <input type="number" class="form-control @error('stock_qty') is-invalid @enderror"
-                                        id="stocks" placeholder="Stocks" name="stock_qty"
-                                        value="{{ old('stock_qty') }}">
-                                    @error('stock_qty')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-sm-12">
-                                <div class="mb-3">
-                                    <label class="form-label" for="product-price-input">Price</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon"><i
-                                                class="bi bi-currency-rupee"></i></span>
-                                        <input type="text" class="form-control @error('price') is-invalid @enderror"
-                                            id="product-price-input" name="price" placeholder="Enter price"
-                                            value="{{ old('price') }}" aria-label="Price"
-                                            aria-describedby="product-price-addon">
-                                        @error('price')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end col -->
-                        </div>
-                        <!-- end row -->
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="product-discount-input">Offer Price</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon"><i
-                                                class="bi bi-currency-rupee"></i></span>
-                                        <input type="text"
-                                            class="form-control @error('offer_price') is-invalid @enderror"
-                                            id="offer_price" placeholder="Enter offer price"
-                                            value="{{ old('offer_price') }}" aria-label="offer_price"
-                                            aria-describedby="product-discount-addon" name="offer_price">
-                                        @error('offer_price')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="offer_start_date">Offer Start Date</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon"><i
-                                                class="bi bi-calendar-date"></i></span>
-                                        <input type="date"
-                                            class="form-control @error('offer_start_date') is-invalid @enderror"
-                                            id="offer_start_date" placeholder="Enter offer price"
-                                            aria-label="offer_start_date" aria-describedby="product-discount-addon"
-                                            name="offer_start_date" value="{{ old('offer_start_date') }}">
-                                        @error('offer_start_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="offer_end_date">Offer End Date</label>
-                                    <div class="input-group has-validation mb-3">
-                                        <span class="input-group-text" id="product-price-addon"><i
-                                                class="bi bi-calendar-date"></i></span>
-                                        <input type="date"
-                                            class="form-control @error('offer_end_date') is-invalid @enderror"
-                                            id="offer_end_date" placeholder="Enter offer price" aria-label="offer_price"
-                                            aria-describedby="product-discount-addon" name="offer_end_date"
-                                            value="{{ old('offer_end_date') }}">
-                                        @error('offer_end_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="avatar-sm">
-                                            <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                                                <i class="bi bi-box-seam"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h5 class="card-title mb-1">Product Attributes</h5>
-                                        <p class="text-muted mb-0">Add attributes by clicking the plus button.</p>
-                                    </div>
-                                    <div class="">
-                                        <button id="add-row-btn" class="btn btn-sm btn-info rounded-pill">
-                                            <i class="bi bi-plus-circle align-middle rounded-pill fs-16 me-1"></i>Add
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="container">
-                                    <!-- Attribute rows will be added here -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="avatar-sm">
-                                            <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                                                <i class="bi bi-images"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h5 class="card-title mb-1">Product Gallery</h5>
-                                        <p class="text-muted mb-0">Add product gallery images.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <input type="hidden" name="images" id="images" value="{{ old('images') }}">
-
-                                @foreach (explode(',', old('images')) as $image)
-                                    <img src="{{ asset('storage/' . $image) }}" alt="" height="200"
-                                        class="card-img-top img-fluid" id="image-thumbnail"
-                                        data-base-url="{{ asset('storage/' . $image) }}">
-                                @endforeach
-
-                                <div class="dropzone my-dropzone text-center">
-                                    <div class="dz-message">
-                                        <div class="mb-3">
-                                            <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                        </div>
-
-                                        <h5>Drop files here or click to upload.</h5>
-                                    </div>
-                                </div>
-                                <div class="error-msg mt-1">Please add a product images.</div>
-                            </div>
-                        </div>
-                        <!-- end card -->
-                    </div>
-                </div>
-                <!-- Modal for adding custom attribute -->
-                <div class="modal fade" id="addAttributeModal" tabindex="-1" aria-labelledby="addAttributeModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addAttributeModalLabel">Add Custom Attribute</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" id="customAttributeInput" class="form-control"
-                                    placeholder="Enter custom attribute name">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="saveCustomAttribute">Add</button>
-                            </div>
-                        </div>
-                    </div>
+                    <h5 class="card-title mb-1">Product Variants</h5>
                 </div>
             </div>
-            <!-- end card -->
+            <div class="card-body">
+                <div class="row">
+                    @foreach ($product->variants as $variant)
+                        <div class="col-xxl-3 col-lg-4 col-md-6">
+                            <div class="card watch-product text-center border-0 card-animate overflow-hidden">
+                                <div class="card-body pt-4">
+                                    <div class="pt-2">
+                                        @if ($variant->galleries->isNotEmpty())
+                                            <img src="{{ $variant->galleries->first()->imageUrl }}"
+                                                alt="{{ $product->name . '-' . $variant->id }}"
+                                                class="rounded img-fluid">
+                                        @else
+                                            <img src="{{ asset('backend/build/images/logo-light.png') }}"
+                                                alt="{{ $product->name . '-' . $variant->id }}"
+                                                class="rounded img-fluid">
+                                        @endif
+                                        <div class="mt-4">
+                                            {{-- <h6 class="fs-15 text-capitalize text-truncate"><a href="#!"
+                                                        class="text-reset">Full Black Fancy Watch</a></h6> --}}
+                                            <p class="mb-0 fs-16"><x-show-price :variant="$variant"></x-show-price></p>
+                                        </div>
+                                        <ul
+                                            class="watch-widgets-menu hstack justify-content-center gap-2 list-unstyled position-absolute mb-0">
+                                            <li>
+                                                <a href="{{ route('admin.product-variant.edit', ['id' => $variant->id]) }}"
+                                                    class="rounded"><i class="bi bi-pencil"></i></a>
+                                            </li>
+                                            {{-- <li>
+                                                    <a href="shop-cart" class="rounded"><i class="bi bi-bag"></i></a>
+                                                </li> --}}
+                                            <li>
+                                                <a href="product-details" class="rounded"><i class="bi bi-eye"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    @endforeach
+                </div>
+            </div>
         </div>
         <div class="d-flex justify-content-center my-5">
-            <button type="submit" class="btn btn-success btn-animation ">Add Product</button>
+            <button type="submit" class="btn btn-success btn-animation ">Update</button>
         </div>
         <!-- end row -->
     </form>
+
 @endsection
 @push('scripts')
     <!-- ckeditor -->
     <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/ckeditor.js') }}"></script>
-    <!-- dropzone js -->
-    <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-    <!-- create-product -->
-    {{-- <script src="{{ URL::asset('build/js/backend/create-product.init.js') }}"></script> --}}
     <!-- Modern colorpicker bundle -->
-    <script src="{{ URL::asset('build/libs/@simonwep/pickr.min.js') }}"></script>
+    {{-- <script src="{{ URL::asset('build/libs/@simonwep/pickr.min.js') }}"></script> --}}
     <script type='text/javascript' src='{{ asset('backend/build/libs/flatpickr/flatpickr.min.js') }}'></script>
     <script>
         ClassicEditor
@@ -506,60 +403,53 @@
                 console.error(error);
             });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the database timestamp or old value from the Blade template
-            var oldOfferStartDate = "{{ old('offer_start_date') ?? 'today' }}";
-            var oldOfferEndDate = "{{ old('offer_end_date') ?? 'today' }}";
+        // new Choices('#product_tags', {
+        //     removeItemButton: true,
+        //     delimiter: ',',
+        //     editItems: true, // Allow editing existing tags
+        //     maxItemCount: 15, // Optional: Set a maximum number of tags
+        //     placeholder: 'Add product tags (e.g., shirt, blue, cotton)',
+        // });
 
-            // Initialize Flatpickr datetime picker
-            flatpickr("#offer_start_date", {
-                minDate: "today",
-                defaultDate: oldOfferStartDate, // Set the default date and time
-                time_24hr: true
-            });
+        $(document).ready(function() {
+            const selectedStore = "{{ $product->store_id }}";
+            const selectedCategory = "{{ $product->category_id }}";
+            const selectedSubCategory = "{{ $product->sub_category_id }}";
 
-            // Initialize Flatpickr datetime picker
-            flatpickr("#offer_end_date", {
-                minDate: "today",
-                defaultDate: oldOfferEndDate, // Set the default date and time
-                time_24hr: true
-            });
-
-            new Choices('#product_tags', {
-                removeItemButton: true,
-                delimiter: ',',
-                editItems: true, // Allow editing existing tags
-                maxItemCount: 15, // Optional: Set a maximum number of tags
-                placeholder: 'Add product tags (e.g., shirt, blue, cotton)',
-            });
+            console.log('Selected Store:', selectedStore);
+            console.log('Selected Category:', selectedCategory);
+            console.log('Selected SubCategory:', selectedSubCategory);
 
             // Initialize Choices for Store dropdown
-            new Choices('.store', {
+            const storeChoices = new Choices('.store', {
                 searchEnabled: true,
             });
 
-            // Function to initialize or update Choices
-            function updateChoices(selector, data, placeholder, isDisabled = false) {
-                let choicesInstance = $(selector).data('choicesInstance');
+            console.log('Store Choices initialized:', storeChoices);
 
-                if (choicesInstance) {
-                    choicesInstance.clearStore();
-                    choicesInstance.clearChoices();
-                } else {
-                    choicesInstance = new Choices(selector, {
-                        searchEnabled: true,
-                        placeholder: true,
-                        placeholderValue: placeholder,
-                    });
-                    $(selector).data('choicesInstance', choicesInstance);
-                }
+            // Initialize empty Choices instances for Category and SubCategory
+            const categoryChoices = new Choices('.category', {
+                searchEnabled: true,
+                placeholder: true,
+                placeholderValue: 'Select category'
+            });
 
-                // Add the options
-                if (data.length > 0) {
-                    choicesInstance.setChoices(data, 'value', 'label', true);
-                }
+            const subCategoryChoices = new Choices('.sub_category', {
+                searchEnabled: true,
+                placeholder: true,
+                placeholderValue: 'Select SubCategory'
+            });
 
-                // Disable or enable the dropdown based on the isDisabled flag
+            console.log('Category Choices initialized:', categoryChoices);
+            console.log('SubCategory Choices initialized:', subCategoryChoices);
+
+            // Function to update Choices instances
+            function updateChoices(choicesInstance, data, placeholder, isDisabled = false) {
+                console.log('Updating Choices:', choicesInstance, 'Data:', data, 'Is Disabled:', isDisabled);
+
+                choicesInstance.clearChoices();
+                choicesInstance.setChoices(data, 'value', 'label', true);
+
                 if (isDisabled) {
                     choicesInstance.disable();
                 } else {
@@ -571,222 +461,173 @@
             }
 
             // Function to fetch and populate dropdown options
-            function fetchDropdownOptions(url, params, selector, placeholder) {
+            function fetchDropdownOptions(url, params, choicesInstance, placeholder, callback) {
+                console.log('Fetching options from:', url, 'with params:', params);
+
                 $.ajax({
                     method: 'GET',
                     url: url,
                     data: params,
                     success: function(data) {
-                        // Populate the dropdown with new options
-                        updateChoices(selector, data.map(item => ({
-                            value: item.id,
+                        const formattedData = data.map(item => ({
+                            value: String(item.id), // Convert values to string
                             label: item.name,
-                        })), placeholder, false);
+                        }));
+
+                        console.log('Fetched data:', formattedData);
+
+                        updateChoices(choicesInstance, formattedData, placeholder, false);
+
+                        // Execute callback if provided
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
                     },
                     error: function(xhr, status, error) {
-                        console.log(error);
+                        console.log('Error fetching data:', error);
                     }
                 });
             }
 
-            // Initial setup: disable category and subcategory
-            updateChoices('.category', [], 'Select category', true);
-            updateChoices('.sub_category', [], 'Select SubCategory', true);
+            // Set the selected values when the page loads
+            if (selectedStore) {
+                console.log('Setting selected store:', selectedStore);
+                storeChoices.setChoiceByValue(String(selectedStore));
+
+                // Fetch categories based on selected store
+                fetchDropdownOptions("{{ route('admin.product.get-categories') }}", {
+                    id: selectedStore
+                }, categoryChoices, 'Select category', function() {
+                    if (selectedCategory) {
+                        console.log('Setting selected category:', selectedCategory);
+                        categoryChoices.setChoiceByValue(String(selectedCategory));
+                        // Log the selected value
+                        setTimeout(() => {
+                            console.log('Currently selected category:', categoryChoices.getValue(
+                                true));
+                        }, 500); // Wait a bit before checking the value
+                    }
+                });
+            }
+
+            // Fetch subcategories based on selected category
+            if (selectedCategory) {
+                console.log('Setting selected category to fetch subcategories:', selectedCategory);
+                fetchDropdownOptions("{{ route('admin.product.get-sub-categories') }}", {
+                    id: selectedCategory
+                }, subCategoryChoices, 'Select SubCategory', function() {
+                    if (selectedSubCategory) {
+                        console.log('Setting selected subcategory:', selectedSubCategory);
+                        subCategoryChoices.setChoiceByValue(String(selectedSubCategory));
+                        // Log the selected value
+                        setTimeout(() => {
+                            console.log('Currently selected subcategory:', subCategoryChoices
+                                .getValue(true));
+                        }, 500); // Wait a bit before checking the value
+                    }
+                });
+            }
 
             // Store change event to load categories
             $('body').on('change', '.store', function(e) {
                 const storeId = $(this).val();
+                console.log('Store changed, new storeId:', storeId);
 
                 if (storeId) {
-                    // Fetch and enable category dropdown
                     fetchDropdownOptions("{{ route('admin.product.get-categories') }}", {
                         id: storeId
-                    }, '.category', 'Select category');
+                    }, categoryChoices, 'Select category');
 
                     // Disable subcategory dropdown
-                    updateChoices('.sub_category', [], 'Select SubCategory', true);
+                    updateChoices(subCategoryChoices, [], 'Select SubCategory', true);
                 } else {
-                    // Disable both category and subcategory dropdowns
-                    updateChoices('.category', [], 'Select category', true);
-                    updateChoices('.sub_category', [], 'Select SubCategory', true);
+                    updateChoices(categoryChoices, [], 'Select category', true);
+                    updateChoices(subCategoryChoices, [], 'Select SubCategory', true);
                 }
             });
 
             // Category change event to load subcategories
             $('body').on('change', '.category', function(e) {
                 const categoryId = $(this).val();
+                console.log('Category changed, new categoryId:', categoryId);
 
                 if (categoryId) {
-                    // Fetch and enable subcategory dropdown
                     fetchDropdownOptions("{{ route('admin.product.get-sub-categories') }}", {
                         id: categoryId
-                    }, '.sub_category', 'Select SubCategory');
+                    }, subCategoryChoices, 'Select SubCategory');
                 } else {
-                    // Disable subcategory dropdown
-                    updateChoices('.sub_category', [], 'Select SubCategory', true);
+                    updateChoices(subCategoryChoices, [], 'Select SubCategory', true);
                 }
             });
-        });
 
-        // Ensure Dropzone is available as a global variable
-        var thumbnailArray = [];
-        var uploadedFilePaths = []; // Keep track of uploaded file paths
-
-        // Select all elements with the class 'my-dropzone' and initialize Dropzone for each
-        var dropzoneElements = document.querySelectorAll("div.my-dropzone");
-        dropzoneElements.forEach(function(dropzoneElement) {
-            var myDropzone = new Dropzone(dropzoneElement, {
-                url: "{{ route('admin.image.store') }}",
-                addRemoveLinks: true,
-                uploadMultiple: false,
-                maxFilesize: 20,
-                createImageThumbnails: true,
-                maxThumbnailFilesize: 0.2,
-                thumbnailWidth: 120,
-                thumbnailHeight: 120,
-                acceptedFiles: ".jpeg,.jpg,.png,.gif,.webp",
-
-                removedfile: function(file) {
-                    /// Remove the file from the array when removed
-                    var index = uploadedFilePaths.indexOf(file.path);
-                    if (index !== -1) {
-                        uploadedFilePaths.splice(index, 1);
-                    }
-                    file.previewElement.remove();
-                    thumbnailArray = [];
-                    removeFileFromServer(JSON.parse(file.xhr.response).path.replace(/\\/g, '/'));
-
-                },
-                sending: function(file, xhr, formData) {
-                    // Append CSRF token to the request headers
-                    formData.append("_token", "{{ csrf_token() }}");
-                    formData.append("path", 'uploads/products');
-                },
-                success: function(file, response) {
-                    // Handle the successful upload, you can use response.path to get the file path
-                    console.log('File uploaded successfully:', response.path);
-
-                    uploadedFilePaths.push(response.path);
-
-                    // Update the hidden input field with the new paths as a comma-separated string
-                    $('#images').val(uploadedFilePaths.join(','));
-
-                    console.log($('#images').val());
-                },
-
-            });
-
-            myDropzone.on("thumbnail", function(file, dataUrl) {
-                // Handle thumbnail generation
-                thumbnailArray.push(dataUrl);
-            });
-
-        });
-
-        // myDropzone.on("thumbnail", function(file, dataUrl) {
-        //     // Handle thumbnail generation
-        //     thumbnailArray.push(dataUrl);
-        // });
-
-        function removeFileFromServer(url) {
-            console.log(url);
-            // Make an AJAX request to delete the file
-            $.ajax({
-                url: "{{ route('admin.image.delete') }}",
-                type: 'POST',
+            $.ajaxSetup({
                 headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                },
-                data: {
-                    _method: 'DELETE',
-                    file_path: url,
-                },
-                success: function(response) {
-                    console.log(response.message);
-                },
-                error: function(error) {
-                    console.error('Error removing file:', error.responseText);
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-        }
 
-        const container = document.getElementById('container');
-        const addRowBtn = document.getElementById('add-row-btn');
-        const saveCustomAttributeBtn = document.getElementById('saveCustomAttribute');
-        const customAttributeInput = document.getElementById('customAttributeInput');
-        const addAttributeModal = new bootstrap.Modal(document.getElementById('addAttributeModal'));
+            $('body').on('click', '.delete-tag', function(event) {
+                event.preventDefault();
+                let deleteUrl = $(this).data('url');
+                let tagId = $(this).data('tag-id');
+                $.ajax({
+                    type: 'DELETE',
+                    url: deleteUrl,
+                    data: {
+                        tag_id: tagId,
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
 
-        let attributes = ['Size', 'Color', 'Material']; // Initial preset attributes
+            const productTagsInput = document.getElementById('product_tags');
 
-        addRowBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            addRow();
-        });
-
-        saveCustomAttributeBtn.addEventListener('click', function() {
-            const newAttribute = customAttributeInput.value.trim();
-            if (newAttribute && !attributes.includes(newAttribute)) {
-                attributes.push(newAttribute);
-                addAttributeModal.hide();
-                addRow(newAttribute);
-                customAttributeInput.value = '';
+            if (productTagsInput) {
+                // Fetch existing tags from the backend
+                fetch("{{ route('api.tags') }}")
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(tags => {
+                        // Create Choices instance with existing tags as options
+                        new Choices(productTagsInput, {
+                            removeItemButton: true,
+                            delimiter: ',',
+                            editItems: true,
+                            maxItemCount: 15,
+                            placeholder: true, // placeholder should be a boolean in Choices.js
+                            placeholderValue: 'Add product tags (e.g., shirt, blue, cotton)', // Corrected way to set placeholder
+                            choices: tags.map(tag => ({
+                                value: tag.name,
+                                label: tag.name
+                            })),
+                            duplicateItemsAllowed: false,
+                            addItemFilter: function(value) {
+                                if (!value) {
+                                    return false;
+                                }
+                                const regex = /^[a-zA-Z0-9\s]+$/;
+                                return regex.test(value);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching tags:', error);
+                        // Handle error (e.g., show an error message)
+                        alert('Failed to load tags. Please try again later.');
+                    });
+            } else {
+                console.error('product_tags element not found.');
             }
         });
-
-        function addRow(selectedAttribute = '') {
-            const newRow = document.createElement('div');
-            newRow.classList.add('row', 'mb-3');
-            newRow.innerHTML = `
-            <div class="col-11 px-0">
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
-                        <div class="form-group">
-                            <select name="attribute[]" class="form-select attribute-select">
-                                <option value="">Select Attribute</option>
-                                ${attributes.map(attr => `<option value="${attr}" ${selectedAttribute === attr ? 'selected' : ''}>${attr}</option>`).join('')}
-                                <option value="custom">Add Custom Attribute</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 mb-2 align-items-center">
-                        <div class="form-group">
-                            <input type="text" name="value[]" placeholder="Value" class="form-control">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-1 align-items-center d-flex justify-content-center">
-                <button class="btn btn-sm btn-danger rounded-pill delete-row">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </div>
-        `;
-
-            const select = newRow.querySelector('.attribute-select');
-            select.addEventListener('change', function() {
-                if (this.value === 'custom') {
-                    addAttributeModal.show();
-                    this.value = ''; // Reset to empty after opening modal
-                }
-            });
-
-            const deleteBtn = newRow.querySelector('.delete-row');
-            deleteBtn.addEventListener('click', function() {
-                newRow.remove();
-            });
-
-            container.appendChild(newRow);
-        }
-
-        // Add initial row
-        addRow();
-
-        function deleteRow(btn) {
-            var row = btn.parentNode.parentNode;
-            row.parentNode.removeChild(row);
-        }
     </script>
-
-    <!-- App js -->
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endpush

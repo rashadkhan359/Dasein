@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    Product List
+    Products
 @endsection
 @section('css')
     <!-- extra css -->
@@ -22,7 +22,7 @@
     </style>
 @endsection
 @section('content')
-    <x-breadcrumb title="Product List" pagetitle="Products" />
+    <x-breadcrumb title="Products" pagetitle="Products" />
     <livewire:product.index>
 @endsection
 @push('scripts')

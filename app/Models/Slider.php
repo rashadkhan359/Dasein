@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Slider extends Model
@@ -15,6 +16,7 @@ class Slider extends Model
         'mini_title',
         'main_title',
         'sub_title',
+        'image',
         'banner',
         'button_url',
         'button_color',
@@ -28,4 +30,11 @@ class Slider extends Model
         'schedule_publish' => 'datetime',
     ];
 
+    public function getImageUrlAttribute(){
+        if(Str::startsWith($this->image, ['http', 'https'])){
+            return $this->image;
+        }
+
+        return asset("storage/{$this->image}");
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\Api\BrandController;
+use App\Http\Controllers\Backend\Api\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,4 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::resource('brand', BrandController::class);
+Route::get('tags', [TagController::class, 'index'])->name('api.tags');

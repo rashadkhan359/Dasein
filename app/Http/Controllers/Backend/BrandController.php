@@ -35,7 +35,7 @@ class BrandController extends Controller
         // Create the new slider
         Brand::create($request->all());
 
-        toastr()->success(__("New brand added successfully."));
+        flash()->success(__("New brand added successfully."));
 
         return redirect()->route('admin.brand.index');
     }
@@ -72,7 +72,7 @@ class BrandController extends Controller
 
         $brand->update($request->all());
 
-        toastr()->success(__('Brand updated successfully.'));
+        flash()->success(__('Brand updated successfully.'));
 
         return redirect()->route('admin.brand.index');
     }
@@ -110,7 +110,7 @@ class BrandController extends Controller
 
         $brand->delete();
 
-        toastr()->success(__('Brand deleted successfully'));
+        flash()->success(__('Brand deleted successfully'));
 
         return response(['status' => 'success', 'message' => 'Brand deleted successfully'], Response::HTTP_OK);
     }

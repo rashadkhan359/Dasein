@@ -372,7 +372,7 @@
                     'id': {{ $category->id }},
                     'categorySlug': "{{ $category->slug }}",
                     'categoryStoreID': "{{ $category->store_id }}",
-                    "categoryImg": "{{ asset('storage/' . $category->image) }}",
+                    "categoryImg": "{{ $category->image_url }}",
                     "categoryImgRaw": "{{ $category->image }}",
                     "categoryTitle": "{{ $category->name }}",
                     "subCategory": {!! json_encode($category->subCategories->pluck('name')) !!},

@@ -12,7 +12,7 @@
             <div class="col-lg-2">
                 <div thumbsSlider class="swiper productSwiper productswiper-2 mb-3 mb-lg-0">
                     <div class="swiper-wrapper product-wrapper">
-                        @foreach ($currentVariant->productGalleries as $gallery)
+                        @foreach ($currentVariant->galleries as $gallery)
                             <div class="swiper-slide" wire:key="thumb-{{ $gallery->id }}">
                                 <div class="product-thumb rounded cursor-pointer">
                                     <img src="{{ $gallery->image_url }}" alt="/" class="img-fluid">
@@ -27,9 +27,10 @@
                 <div class="bg-light rounded-2 position-relative ribbon-box overflow-hidden">
                     <div class="swiper productSwiper2">
                         <div class="swiper-wrapper">
-                            @foreach ($currentVariant->productGalleries as $gallery)
+                            @foreach ($currentVariant->galleries as $gallery)
                                 <div class="swiper-slide" wire:key="main-{{ $gallery->id }}">
-                                    <img src="{{ $gallery->image_url }}" alt="" class="img-fluid drift-trigger" data-zoom="{{ $gallery->image_url }}">
+                                    <img src="{{ $gallery->image_url }}" alt="" class="img-fluid drift-trigger"
+                                        data-zoom="{{ $gallery->image_url }}">
                                 </div>
                             @endforeach
                         </div>
@@ -60,9 +61,9 @@
                     </div>
                 </div>
                 <div class="flex-shrink-0">
-                    <a href="product-create" class="btn btn-soft-secondary btn-icon" data-bs-toggle="tooltip"
-                        data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit"><i
-                            class="ri-pencil-fill align-bottom"></i></a>
+                    <a href="{{ route('admin.product.edit', ['product' => $product]) }}"
+                        class="btn btn-soft-secondary btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                        aria-label="Edit" data-bs-original-title="Edit"><i class="ri-pencil-fill align-bottom"></i></a>
                 </div>
             </div>
 
@@ -82,15 +83,21 @@
                     <div class=" mt-4">
                         <h5 class="fs-15 mb-3">Variants :</h5>
                         <div class="d-flex flex-wrap gap-2">
-                            @foreach ($product->productVariants as $variant)
+                            @foreach ($product->variants as $variant)
                                 <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top"
                                     data-bs-original-title="{{ $this->getStock($variant) }}">
                                     <button type="button"
                                         class="btn p-0 d-flex align-items-center justify-content-center border rounded @if ($currentVariant->id === $variant->id) border-success border-3 @endif"
                                         wire:click='changeVariant({{ $variant->id }})'>
-                                        <img src="{{ $variant->productGalleries->first()->imageUrl }}"
-                                            alt="{{ $product->name . '-' . $variant->id }}" width="100"
-                                            height="100" class="rounded avatar-md">
+                                        @if ($variant->galleries->isNotEmpty())
+                                            <img src="{{ $variant->galleries->first()->imageUrl }}"
+                                                alt="{{ $product->name . '-' . $variant->id }}" width="100"
+                                                height="100" class="rounded avatar-md">
+                                        @else
+                                            <img src="{{ asset('backend/build/images/logo-light.png') }}"
+                                                alt="{{ $product->name . '-' . $variant->id }}" width="100"
+                                                height="100" class="rounded avatar-md">
+                                        @endif
                                     </button>
                                 </div>
                             @endforeach
@@ -166,7 +173,7 @@
             <h5 class="fs-15">Product Details:</h5>
             <div class="table-responsive">
                 <table class="table table-sm table-borderless align-middle description-table">
-                    @foreach ($currentVariant->productAttributes as $attribute)
+                    @foreach ($currentVariant->attributes as $attribute)
                         <tr>
                             <th>{{ $attribute->attribute_name }}</th>
                             <td>{{ $attribute->attribute_value }}</td>

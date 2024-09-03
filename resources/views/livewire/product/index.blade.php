@@ -21,7 +21,7 @@
                             @foreach ($stores as $store)
                                 <li>
                                     <a href="#"
-                                        class="d-flex py-1 align-items-center px-2 @if ($currentStore->id == $store->id) active-store @endif">
+                                        class="d-flex py-1 align-items-center px-2 @if ($currentStore->id == $store->id) bg-primary @endif">
                                         <div class="flex-grow-1">
                                             <h6 class="mb-0 listname">{{ $store->name }}</h6>
                                         </div>
@@ -31,7 +31,6 @@
                                     </a>
                                 </li>
                             @endforeach
-
                         </ul>
                     </div>
                 </div>
@@ -393,7 +392,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="d-flex align-items-center justify-content-center me-3 rounded">
-                                            <img src="{{ $product->image }}" alt="{{ $product->name }}" width="50"
+                                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" width="50"
                                                 height="50" class="rounded">
                                         </div>
                                         <div>
@@ -401,14 +400,14 @@
                                                     href="{{ route('admin.product.show', ['product' => $product]) }}"
                                                     class="text-decoration-underline">{{ ucwords($product->name) }}</a>
                                             </div>
-                                            <div class="text-muted small">{{ $product->category->name }}</div>
+                                            <div class="text-muted small">{{ $product->category ? $product->category->name : `<span class="text-danger">undefined</span>` }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ $product->productVariants ? $product->productVariants->sum('stock_qty') : 0 }}
+                                <td>{{ $product->variants ? $product->variants->sum('stock_qty') : 0 }}
                                 </td>
                                 <td>
-                                    {{ $product->productVariants->count() }}
+                                    {{ $product->variants->count() }}
                                 </td>
                                 <td>{{ $product->orders }}</td>
                                 <td>{{ $product->formatted_publish_date ?? $product->formatted_created_at }}</td>
@@ -477,24 +476,24 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <img src="{{ $product->image }}" alt=""
+                                    <img src="{{ $product->image_url }}" alt=""
                                         style="max-height: 150px;max-width: 100%;" class="mx-auto d-block rounded-2">
                                     <div class="avatar-xs label">
                                         <div class="avatar-title bg-danger rounded-circle fs-11">48%</div>
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <div class="mb-2 d-flex justify-content-between align-items-center">
+                                    {{-- <div class="mb-2 d-flex justify-content-between align-items-center">
                                         <h5 class="text-primary fs-17 mb-0">$900<span
                                                 class="text-muted fs-14"><del>$1200</del></span></h5>
                                         <span>3.8 <i class="ri-star-half-fill text-warning align-middle"></i></span>
-                                    </div>
-                                    <a href="#!">
+                                    </div> --}}
+                                    <a href="{{ route('admin.product.show', ['product' => $product]) }}">
                                         <h6 class="fs-16 text-capitalize lh-base text-truncate mb-0">
                                             {{ ucwords($product->name) }}
                                         </h6>
                                     </a>
-                                    <p class="text-muted">{{ $product->category->name }}</p>
+                                    <p class="text-muted">{{ $product->category ? $product->category->name : `<span class="text-danger">undefined</span>` }}</p>
                                     <div class="row d-none">
                                         <div class="col-6">
                                             <ul
@@ -520,7 +519,7 @@
                                     <div class="row text-center g-0">
                                         <div class="col-4 border-end border-end-dashed">
                                             <div class="mt-3">
-                                                <h5 class="fs-15 text-truncate mb-1">{{ $product->productVariants ? $product->productVariants->sum('stock_qty') : 0 }}</h5>
+                                                <h5 class="fs-15 text-truncate mb-1">{{ $product->variants ? $product->variants->sum('stock_qty') : 0 }}</h5>
                                                 <p class="text-muted mb-0">Stocks</p>
                                             </div>
                                         </div>

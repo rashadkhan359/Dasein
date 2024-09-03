@@ -11,8 +11,8 @@ class Show extends Component
 {
     public $product, $currentVariant;
     public function mount($id){
-        $this->product = Product::with(['productVariants', 'productVariants.productGalleries', 'productVariants.productAttributes'])->find($id);
-        $this->currentVariant = $this->product->productVariants()->oldest()->first();
+        $this->product = Product::with(['variants', 'variants.galleries', 'variants.attributes'])->find($id);
+        $this->currentVariant = $this->product->variants()->oldest()->first();
     }
     public function render()
     {
@@ -28,7 +28,7 @@ class Show extends Component
     }
 
     public function changeVariant($id){
-        $this->currentVariant = ProductVariant::with(['productGalleries', 'productAttributes'])->find($id);
+        $this->currentVariant = ProductVariant::with(['galleries', 'attributes'])->find($id);
         $this->dispatch('variantChanged');
     }
 

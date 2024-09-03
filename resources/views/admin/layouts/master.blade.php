@@ -60,7 +60,6 @@
                 }
             });
 
-
             $('body').on('click', '.delete-item', function(event) {
                 event.preventDefault();
 

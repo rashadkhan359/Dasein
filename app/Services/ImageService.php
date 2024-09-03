@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Traits;
+namespace App\Services;
 
 use Illuminate\Support\Facades\File;
 use Symfony\Component\HttpFoundation\Response;
 
-trait Image
-{
-    /**
+class ImageService{
+        /**
      * @param File | string
      * @return string
      */
@@ -20,26 +19,28 @@ trait Image
         $file->storeAs($path, $fileName, 'public');
 
         // Return the file path for further use
-        return $path . '/' . $fileName;
+        return "{$path}/{$fileName}";
     }
 
+
+    public static function deleteFromUrl($imageUrl)
+    {
+        $filePath = parse_url($imageUrl, PHP_URL_PATH);
+        self::deleteFromPath($filePath);
+    }
 
     /**
      * Remove the image
      * @param string
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroyImage($filePath)
+    public static function deleteFromPath($filePath)
     {
         $fullPath = public_path($filePath);
         if (File::exists($fullPath)) {
-            // Delete the file from the server
             File::delete($fullPath);
-            // Optionally, you can also remove the file entry from the database if needed
-            // Your code here...
-            return response()->json(['message' => 'File deleted successfully.'], Response::HTTP_OK);
+            return response()->json(['message' => 'File deleted.'], Response::HTTP_OK);
         }
-
         return response()->json(['message' => 'File not found.'], Response::HTTP_NOT_FOUND);
     }
 }

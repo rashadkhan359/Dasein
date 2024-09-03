@@ -40,7 +40,7 @@ class SubCategoryController extends Controller
         // Create the new slider
         SubCategory::create($request->all());
 
-        toastr()->success(__("New sub-category added successfully."));
+        flash()->success(__("New sub-category added successfully."));
 
         return redirect()->route('admin.sub-category.index');
     }
@@ -77,7 +77,7 @@ class SubCategoryController extends Controller
 
         $store->update($request->all());
 
-        toastr()->success(__('SubCategory updated successfully.'));
+        flash()->success(__('SubCategory updated successfully.'));
 
         return redirect()->route('admin.sub-category.index');
     }
@@ -95,7 +95,7 @@ class SubCategoryController extends Controller
 
         $store->delete();
 
-        toastr()->success(__('SubCategory deleted successfully'));
+        flash()->success(__('SubCategory deleted successfully'));
 
         return response(['status' => 'success', 'message' => 'SubCategory deleted successfully'], Response::HTTP_OK);
     }
@@ -116,7 +116,7 @@ class SubCategoryController extends Controller
         $store->update(['status' => $request->isActive]);
 
         $message = $store->status ? 'SubCategory activated successfully.' : 'SubCategory deactivated successfully.';
-
+        flash()->success($message);
         return response()->json(['success' => $message], Response::HTTP_OK);
     }
 }

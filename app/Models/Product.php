@@ -58,9 +58,17 @@ class Product extends Model
 
         return $count ? "{$slug}-{$count}" : $slug;
     }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 
-    public function productVariants(){
+    public function variants(){
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function galleries(){
+        return $this->hasMany(ProductVariantGallery::class);
     }
 
     public function category(){
@@ -80,5 +88,13 @@ class Product extends Model
     }
     public function getFormattedCreatedAtAttribute(){
         return $this->created_at->format('j F, Y');
+    }
+
+    public function getImageUrlAttribute(){
+        if(Str::startsWith($this->image, ['http', 'https'])){
+            return $this->image;
+        }
+
+        return asset("storage/{$this->image}");
     }
 }

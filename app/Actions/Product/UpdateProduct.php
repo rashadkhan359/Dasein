@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
-class CreateProduct
+class UpdateProduct
 {
     protected $createProductVariant;
     protected $productService;
@@ -17,12 +17,12 @@ class CreateProduct
         $this->productService = $productService;
     }
 
-    public function create(Request $request)
+    public function execute(Request $request, Product $product)
     {
         DB::beginTransaction();
 
         try {
-            $product = Product::create([
+            $product->update([
                 'name' => $request->name,
                 'long_description' => $request->long_description,
                 'short_description' => $request->short_description,
@@ -35,16 +35,12 @@ class CreateProduct
                 'seo_description' => $request->seo_description,
                 'status' => $request->status,
                 'visibility' => $request->visibility,
+                'allow_backorder' => $request->has('allow_backorder') ? 1 : 0,
             ]);
 
             if(isset($request->tags)){
                 $this->productService->addTagsToProduct($request->input('tags'), $product);
             }
-
-            if(isset($request->stock_qty) || isset($request->price) || isset($request->images) || isset($request->attribute)){
-                $this->createProductVariant->create($request, $product);
-            }
-
 
             // Commit the transaction if everything is successful
             DB::commit();

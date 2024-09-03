@@ -20,7 +20,7 @@ class StoreController extends Controller
      */
     public function index(StoreDataTable $dataTable)
     {
-        
+
         return $dataTable->render('admin.store.index');
     }
 
@@ -40,7 +40,7 @@ class StoreController extends Controller
         // Create the new slider
         Store::create($request->all());
 
-        toastr()->success(__("New store added successfully."));
+        flash()->success(__("New store added successfully."));
 
         return redirect()->route('admin.store.index');
     }
@@ -77,7 +77,7 @@ class StoreController extends Controller
 
         $store->update($request->all());
 
-        toastr()->success(__('Store updated successfully.'));
+        flash()->success(__('Store updated successfully.'));
 
         return redirect()->route('admin.store.index');
 
@@ -116,7 +116,7 @@ class StoreController extends Controller
 
         $store->delete();
 
-        toastr()->success(__('Store deleted successfully'));
+        flash()->success(__('Store deleted successfully'));
 
         return response(['status' => 'success', 'message' => 'Store deleted successfully'], Response::HTTP_OK);
     }

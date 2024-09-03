@@ -46,52 +46,52 @@ class ProductFilter extends FilterService
 
         return parent::between($query, $field, $values);
     }
-    
+
     protected function eq(Builder $query, string $field, $value): Builder
     {
-        return $query->whereHas('productVariants', function ($q) use ($field, $value) {
+        return $query->whereHas('variant', function ($q) use ($field, $value) {
             $q->where($field, '=', $value);
         });
     }
 
     protected function neq(Builder $query, string $field, $value): Builder
     {
-        return $query->whereHas('productVariants', function ($q) use ($field, $value) {
+        return $query->whereHas('variants', function ($q) use ($field, $value) {
             $q->where($field, '!=', $value);
         });
     }
 
     protected function gt(Builder $query, string $field, $value): Builder
     {
-        return $query->whereHas('productVariants', function ($q) use ($field, $value) {
+        return $query->whereHas('variants', function ($q) use ($field, $value) {
             $q->where($field, '>', $value);
         });
     }
 
     protected function gte(Builder $query, string $field, $value): Builder
     {
-        return $query->whereHas('productVariants', function ($q) use ($field, $value) {
+        return $query->whereHas('variants', function ($q) use ($field, $value) {
             $q->where($field, '>=', $value);
         });
     }
 
     protected function lt(Builder $query, string $field, $value): Builder
     {
-        return $query->whereHas('productVariants', function ($q) use ($field, $value) {
+        return $query->whereHas('variants', function ($q) use ($field, $value) {
             $q->where($field, '<', $value);
         });
     }
 
     protected function lte(Builder $query, string $field, $value): Builder
     {
-        return $query->whereHas('productVariants', function ($q) use ($field, $value) {
+        return $query->whereHas('variants', function ($q) use ($field, $value) {
             $q->where($field, '<=', $value);
         });
     }
 
     protected function in(Builder $query, string $field, array $values): Builder
     {
-        return $query->whereHas('productVariants', function ($q) use ($field, $values) {
+        return $query->whereHas('variants', function ($q) use ($field, $values) {
             $q->whereIn($field, $values);
         });
     }
@@ -100,7 +100,7 @@ class ProductFilter extends FilterService
     {
         [$minValue, $maxValue] = $values;
 
-        return $query->whereHas('productVariants', function ($q) use ($minValue, $maxValue, $field) {
+        return $query->whereHas('variants', function ($q) use ($minValue, $maxValue, $field) {
             $q->whereBetween($field, [$minValue, $maxValue]);
         });
     }
